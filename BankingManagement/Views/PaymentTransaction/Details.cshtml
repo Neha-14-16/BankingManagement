@@ -1,0 +1,65 @@
+﻿@model BankingManagement.Models.PaymentTransaction
+
+@{
+    ViewBag.Title = "Payment Details";
+}
+
+<h2>Payment Details</h2>
+
+<hr />
+
+@if (Model == null)
+{
+    <p>Payment transaction not found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+
+        <tr>
+            <th>Payment ID</th>
+            <td>@Model.PaymentId</td>
+        </tr>
+
+        <tr>
+            <th>Account ID</th>
+            <td>@Model.AccountId</td>
+        </tr>
+
+        <tr>
+            <th>Amount</th>
+            <td>₹ @Model.Amount</td>
+        </tr>
+
+        <tr>
+            <th>Payment Type</th>
+            <td>@Model.PaymentType</td>
+        </tr>
+
+        <tr>
+            <th>Payment Date</th>
+            <td>@Model.PaymentDate</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td>@Model.Status</td>
+        </tr>
+
+        <tr>
+            <th>Reference Number</th>
+            <td>@Model.ReferenceNumber</td>
+        </tr>
+
+    </table>
+}
+
+<br />
+
+@Html.ActionLink(
+    "Back to Payment Transactions",
+    "Index",
+    "PaymentTransaction",
+    null,
+    new { @class = "btn btn-primary" }
+)

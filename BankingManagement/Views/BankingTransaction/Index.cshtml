@@ -1,0 +1,138 @@
+﻿@model IEnumerable<BankingManagement.DTOs.BankingTransactionDTO>
+
+@{
+    ViewBag.Title = "Banking Transactions";
+}
+
+<h2>Banking Transactions</h2>
+
+<p>
+    @Html.ActionLink(
+        "Create Transfer",
+        "Create",
+        "BankingTransaction",
+        null,
+        new { @class = "btn btn-primary" }
+    )
+</p>
+
+<table class="table">
+
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.TransactionId
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.FromAccountId
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.ToAccountId
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.Amount
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.TransactionDate
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.Status
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.ReferenceNumber
+            )
+        </th>
+
+        <th>
+            Actions
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.TransactionId
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.FromAccountId
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.ToAccountId
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.Amount
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.TransactionDate
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.Status
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.ReferenceNumber
+                )
+            </td>
+
+            <td>
+
+                @Html.ActionLink(
+                    "Details",
+                    "Details",
+                    new { id = item.TransactionId }
+                )
+
+                |
+
+                @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    new { id = item.TransactionId }
+                )
+
+            </td>
+
+        </tr>
+    }
+
+</table>

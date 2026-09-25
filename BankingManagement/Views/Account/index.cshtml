@@ -1,0 +1,106 @@
+﻿@model IEnumerable<BankingManagement.DTOs.AccountDTO>
+
+@{
+    ViewBag.Title = "Accounts";
+}
+
+<h2>Accounts</h2>
+
+<p>
+    @Html.ActionLink(
+        "Create New Account",
+        "Create",
+        "Account",
+        null,
+        new { @class = "btn btn-primary" }
+    )
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountId)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerId)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.AccountType)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+
+        <th>
+            Actions
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountId)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerId)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountType)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+
+            <td>
+                @Html.ActionLink(
+                    "Edit",
+                    "Edit",
+                    new { id = item.AccountId }
+                )
+                |
+                @Html.ActionLink(
+                    "Details",
+                    "Details",
+                    new { id = item.AccountId }
+                )
+                |
+                @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    new { id = item.AccountId }
+                )
+            </td>
+        </tr>
+    }
+</table>

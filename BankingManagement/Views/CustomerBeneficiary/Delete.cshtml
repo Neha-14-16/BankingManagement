@@ -1,0 +1,65 @@
+﻿@model BankingManagement.DTOs.CustomerBeneficiaryDTO
+
+@{
+    ViewBag.Title = "Delete Beneficiary";
+}
+
+<h2>Delete Beneficiary</h2>
+
+<hr />
+
+<h4>Are you sure you want to delete this beneficiary?</h4>
+
+<br />
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Beneficiary Name</th>
+        <td>@Model.BeneficiaryName</td>
+    </tr>
+
+    <tr>
+        <th>Account Number</th>
+        <td>@Model.AccountNumber</td>
+    </tr>
+
+    <tr>
+        <th>IFSC Code</th>
+        <td>@Model.IFSCCode</td>
+    </tr>
+
+    <tr>
+        <th>Bank Name</th>
+        <td>@Model.BankName</td>
+    </tr>
+
+</table>
+
+<br />
+
+@using (Html.BeginForm(
+    "DeleteConfirmed",
+    "CustomerBeneficiary",
+    FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(
+        model => model.BeneficiaryId
+    )
+
+    <button type="submit" class="btn btn-danger">
+        Delete Beneficiary
+    </button>
+
+    <span style="margin-left: 10px;"></span>
+
+    @Html.ActionLink(
+        "Cancel",
+        "Index",
+        "CustomerBeneficiary",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+}

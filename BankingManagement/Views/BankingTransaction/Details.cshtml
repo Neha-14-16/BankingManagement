@@ -1,0 +1,109 @@
+﻿@model BankingManagement.DTOs.BankingTransactionDTO
+
+@{
+    ViewBag.Title = "Transaction Details";
+}
+
+<h2>Transaction Details</h2>
+
+<div>
+    <hr />
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.TransactionId
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.TransactionId
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.FromAccountId
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.FromAccountId
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.ToAccountId
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.ToAccountId
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.Amount
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.Amount
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.TransactionDate
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.TransactionDate
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.Status
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.Status
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.ReferenceNumber
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.ReferenceNumber
+            )
+        </dd>
+
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink(
+        "Back to Transactions",
+        "Index",
+        "BankingTransaction",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+</p>

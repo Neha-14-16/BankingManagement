@@ -1,0 +1,149 @@
+﻿@model BankingManagement.DTOs.CreateAccountTransactionDTO
+
+@{
+    ViewBag.Title = "Deposit / Withdrawal";
+}
+
+<h2>Deposit / Withdrawal</h2>
+
+<hr />
+
+@using (Html.BeginForm(
+    "Create",
+    "AccountTransaction",
+    FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(
+            true,
+            "",
+            new { @class = "text-danger" }
+        )
+
+        <div class="form-group">
+
+            @Html.LabelFor(
+                model => model.AccountId,
+                "Account",
+                new { @class = "control-label" }
+            )
+
+            @Html.DropDownListFor(
+                model => model.AccountId,
+                new SelectList(
+                    ViewBag.Accounts,
+                    "AccountId",
+                    "AccountNumber"
+                ),
+                "-- Select Account --",
+                new { @class = "form-control" }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.AccountId,
+                "",
+                new { @class = "text-danger" }
+            )
+
+        </div>
+
+        <br />
+
+        <div class="form-group">
+
+            @Html.LabelFor(
+                model => model.TransactionType,
+                "Transaction Type",
+                new { @class = "control-label" }
+            )
+
+            @Html.DropDownListFor(
+                model => model.TransactionType,
+                new SelectList(
+                    new[]
+                    {
+                        new
+                        {
+                            Value = "Deposit",
+                            Text = "Deposit"
+                        },
+                        new
+                        {
+                            Value = "Withdrawal",
+                            Text = "Withdrawal"
+                        }
+                    },
+                    "Value",
+                    "Text"
+                ),
+                "-- Select Transaction Type --",
+                new { @class = "form-control" }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.TransactionType,
+                "",
+                new { @class = "text-danger" }
+            )
+
+        </div>
+
+        <br />
+
+        <div class="form-group">
+
+            @Html.LabelFor(
+                model => model.Amount,
+                "Amount",
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.Amount,
+                new
+                {
+                    @class = "form-control",
+                    type = "number",
+                    min = "0.01",
+                    step = "0.01",
+                    placeholder = "Enter amount"
+                }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.Amount,
+                "",
+                new { @class = "text-danger" }
+            )
+
+        </div>
+
+        <br />
+
+        <button type="submit"
+                class="btn btn-primary">
+
+            Process Transaction
+
+        </button>
+
+        <span style="margin-left: 10px;"></span>
+
+        @Html.ActionLink(
+            "Back",
+            "Index",
+            "AccountTransaction",
+            null,
+            new { @class = "btn btn-secondary" }
+        )
+
+    </div>
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

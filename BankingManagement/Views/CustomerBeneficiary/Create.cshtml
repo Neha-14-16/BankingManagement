@@ -1,0 +1,228 @@
+﻿@model BankingManagement.DTOs.CustomerBeneficiaryDTO
+
+@{
+    ViewBag.Title = "Add Beneficiary";
+}
+
+<h2>Add Beneficiary</h2>
+
+<hr />
+
+@using (Html.BeginForm(
+    "Create",
+    "CustomerBeneficiary",
+    FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(
+            true,
+            "",
+            new { @class = "text-danger" }
+        )
+
+        <div class="form-group">
+
+            @Html.LabelFor(
+                model => model.BeneficiaryName,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.BeneficiaryName,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Enter beneficiary name"
+                }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.BeneficiaryName,
+                "",
+                new { @class = "text-danger" }
+            )
+
+        </div>
+
+        <br />
+
+        <div class="form-group">
+
+            @Html.LabelFor(
+                model => model.AccountNumber,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.AccountNumber,
+                new
+                {
+                    @class = "form-control",
+                    placeholder = "Enter account number"
+                }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.AccountNumber,
+                "",
+                new { @class = "text-danger" }
+            )
+
+        </div>
+
+        <br />
+
+        <div class="form-group">
+
+            <label class="control-label">
+                Bank
+            </label>
+
+            @Html.DropDownList(
+                "BankBranchId",
+                new SelectList(
+                    ViewBag.BankBranches,
+                    "BankBranchId",
+                    "BankName"
+                ),
+                "-- Select Bank --",
+                new { @class = "form-control" }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.BankBranchId,
+                "",
+                new { @class = "text-danger" }
+            )
+
+        </div>
+
+        <br />
+
+        <div class="form-group">
+
+            <label class="control-label">
+                Branch
+            </label>
+
+            <select id="BranchDropdown"
+                    class="form-control">
+
+                <option value="">
+                    -- Select Branch --
+                </option>
+
+                @foreach (var branch in ViewBag.BankBranches)
+                {
+                    <option value="@branch.BankBranchId"
+                            data-bank="@branch.BankName"
+                            data-ifsc="@branch.IFSCCode">
+
+                        @branch.BranchName
+
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+        <br />
+
+        <div class="form-group">
+
+            <label class="control-label">
+                IFSC Code
+            </label>
+
+            <input type="text"
+                   id="IFSCCode"
+                   class="form-control"
+                   readonly />
+
+        </div>
+
+        <br />
+
+        <button type="submit"
+                class="btn btn-primary">
+
+            Add Beneficiary
+
+        </button>
+
+        &nbsp;
+
+        @Html.ActionLink(
+            "Back to Beneficiaries",
+            "Index",
+            "CustomerBeneficiary",
+            null,
+            new { @class = "btn btn-secondary" }
+        )
+
+    </div>
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        document.getElementById("BankBranchId")
+            .addEventListener(
+                "change",
+                function () {
+
+                    var selectedBankId =
+                        this.value;
+
+                    var branchDropdown =
+                        document.getElementById(
+                            "BranchDropdown"
+                        );
+
+                    var options =
+                        branchDropdown
+                            .getElementsByTagName(
+                                "option"
+                            );
+
+                    branchDropdown.value = "";
+
+                    for (
+                        var i = 0;
+                        i < options.length;
+                        i++
+                    ) {
+
+                        var option =
+                            options[i];
+
+                        if (
+                            option.value ===
+                            selectedBankId
+                        ) {
+
+                            branchDropdown.value =
+                                option.value;
+
+                            document.getElementById(
+                                "IFSCCode"
+                            ).value =
+                                option.getAttribute(
+                                    "data-ifsc"
+                                );
+
+                            break;
+                        }
+                    }
+                }
+            );
+
+    </script>
+}

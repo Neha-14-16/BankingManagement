@@ -1,0 +1,146 @@
+﻿@model IEnumerable<BankingManagement.DTOs.BeneficiaryDTO>
+
+@{
+    ViewBag.Title = "Beneficiaries";
+}
+
+<h2>Beneficiaries</h2>
+
+<p>
+    @Html.ActionLink(
+        "Add Beneficiary",
+        "Create",
+        "Beneficiary",
+        null,
+        new { @class = "btn btn-primary" }
+    )
+</p>
+
+<table class="table">
+
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.BeneficiaryId
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.CustomerId
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.BeneficiaryName
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.AccountNumber
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.IFSCCode
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.BankName
+            )
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(
+                model => model.CreatedDate
+            )
+        </th>
+
+        <th>
+            Actions
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.BeneficiaryId
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.CustomerId
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.BeneficiaryName
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.AccountNumber
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.IFSCCode
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.BankName
+                )
+            </td>
+
+            <td>
+                @Html.DisplayFor(
+                    modelItem => item.CreatedDate
+                )
+            </td>
+
+            <td>
+
+                @Html.ActionLink(
+                    "Edit",
+                    "Edit",
+                    new { id = item.BeneficiaryId }
+                )
+
+                |
+
+                @Html.ActionLink(
+                    "Details",
+                    "Details",
+                    new { id = item.BeneficiaryId }
+                )
+
+                |
+
+                @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    new { id = item.BeneficiaryId }
+                )
+
+            </td>
+
+        </tr>
+    }
+
+</table>

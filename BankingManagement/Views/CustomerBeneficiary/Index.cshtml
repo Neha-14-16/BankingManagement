@@ -1,0 +1,79 @@
+﻿@model IEnumerable<BankingManagement.DTOs.CustomerBeneficiaryDTO>
+
+@{
+    ViewBag.Title = "My Beneficiaries";
+}
+
+<h2>My Beneficiaries</h2>
+
+<hr />
+
+<p>
+    @Html.ActionLink(
+        "Add Beneficiary",
+        "Create",
+        "CustomerBeneficiary",
+        null,
+        new { @class = "btn btn-primary" }
+    )
+</p>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No beneficiaries found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>Beneficiary Name</th>
+            <th>Account Number</th>
+            <th>IFSC Code</th>
+            <th>Bank Name</th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var beneficiary in Model)
+        {
+            <tr>
+                <td>
+                    @beneficiary.BeneficiaryName
+                </td>
+
+                <td>
+                    @beneficiary.AccountNumber
+                </td>
+
+                <td>
+                    @beneficiary.IFSCCode
+                </td>
+
+                <td>
+                    @beneficiary.BankName
+                </td>
+
+                <td>
+                    @Html.ActionLink(
+                        "Delete",
+                        "Delete",
+                        "CustomerBeneficiary",
+                        new { id = beneficiary.BeneficiaryId },
+                        new { @class = "btn btn-danger btn-sm" }
+                    )
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+<br />
+
+@Html.ActionLink(
+    "Back to Dashboard",
+    "Index",
+    "CustomerDashboard",
+    null,
+    new { @class = "btn btn-secondary" }
+)

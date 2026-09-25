@@ -1,0 +1,88 @@
+﻿@model IEnumerable<BankingManagement.Models.PaymentTransaction>
+
+@{
+    ViewBag.Title = "Payment Transactions";
+}
+
+<h2>Payment Transactions</h2>
+
+<hr />
+
+@if (Model == null || !Model.Any())
+{
+    <p>No payment transactions found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>Payment ID</th>
+            <th>Account ID</th>
+            <th>Amount</th>
+            <th>Payment Type</th>
+            <th>Payment Date</th>
+            <th>Status</th>
+            <th>Reference Number</th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var payment in Model)
+        {
+            <tr>
+
+                <td>
+                    @payment.PaymentId
+                </td>
+
+                <td>
+                    @payment.AccountId
+                </td>
+
+                <td>
+                    ₹ @payment.Amount
+                </td>
+
+                <td>
+                    @payment.PaymentType
+                </td>
+
+                <td>
+                    @payment.PaymentDate
+                </td>
+
+                <td>
+                    @payment.Status
+                </td>
+
+                <td>
+                    @payment.ReferenceNumber
+                </td>
+
+                <td>
+
+                    @Html.ActionLink(
+                        "Details",
+                        "Details",
+                        "PaymentTransaction",
+                        new { id = payment.PaymentId },
+                        new { @class = "btn btn-info btn-sm" }
+                    )
+
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+<hr />
+
+@Html.ActionLink(
+    "Back to Administrator Dashboard",
+    "Index",
+    "AdminDashboard",
+    null,
+    new { @class = "btn btn-primary" }
+)

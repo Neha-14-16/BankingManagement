@@ -1,0 +1,135 @@
+﻿@model IEnumerable<BankingManagement.DTOs.AccountTransactionDTO>
+
+@{
+    ViewBag.Title = "Deposit / Withdrawal Transactions";
+}
+
+<h2>Deposit / Withdrawal Transactions</h2>
+
+<hr />
+
+<p>
+    @Html.ActionLink(
+        "New Deposit / Withdrawal",
+        "Create",
+        "AccountTransaction",
+        null,
+        new { @class = "btn btn-primary" }
+    )
+</p>
+
+<br />
+
+@if (Model == null || !Model.Any())
+{
+    <p>No deposit or withdrawal transactions found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>
+                Account Number
+            </th>
+
+            <th>
+                Transaction Type
+            </th>
+
+            <th>
+                Amount
+            </th>
+
+            <th>
+                Transaction Date
+            </th>
+
+            <th>
+                Status
+            </th>
+
+            <th>
+                Reference Number
+            </th>
+
+            <th>
+                Actions
+            </th>
+        </tr>
+
+        @foreach (var transaction in Model)
+        {
+            <tr>
+
+                <td>
+                    @transaction.AccountNumber
+                </td>
+
+                <td>
+                    @transaction.TransactionType
+                </td>
+
+                <td>
+                    ₹ @transaction.Amount
+                </td>
+
+                <td>
+                    @transaction.TransactionDate
+                </td>
+
+                <td>
+                    @transaction.Status
+                </td>
+
+                <td>
+                    @transaction.ReferenceNumber
+                </td>
+
+                <td>
+                    @Html.ActionLink(
+                        "Details",
+                        "Details",
+                        "AccountTransaction",
+                        new
+                        {
+                            id = transaction.AccountTransactionId
+                        },
+                        new
+                        {
+                            @class = "btn btn-info btn-sm"
+                        }
+                    )
+
+                    <span style="margin-left:5px;"></span>
+
+                    @Html.ActionLink(
+                        "Delete",
+                        "Delete",
+                        "AccountTransaction",
+                        new
+                        {
+                            id = transaction.AccountTransactionId
+                        },
+                        new
+                        {
+                            @class = "btn btn-danger btn-sm"
+                        }
+                    )
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+<br />
+
+@Html.ActionLink(
+    "Back to Dashboard",
+    "Index",
+    "Home",
+    null,
+    new { @class = "btn btn-secondary" }
+)

@@ -1,0 +1,244 @@
+﻿@model BankingManagement.DTOs.CustomerDashboardDTO
+
+@{
+    ViewBag.Title = "Customer Dashboard";
+}
+
+<h2>Customer Dashboard</h2>
+
+<hr />
+
+<h3>Welcome, @Model.FullName</h3>
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <h4>Customer Details</h4>
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Full Name</th>
+                <td>@Model.FullName</td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td>@Model.Email</td>
+            </tr>
+
+            <tr>
+                <th>Phone Number</th>
+                <td>@Model.PhoneNumber</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+<hr />
+
+<h3>My Accounts</h3>
+
+@if (Model.Accounts.Count == 0)
+{
+    <p>No accounts found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>Account Number</th>
+            <th>Account Type</th>
+            <th>Balance</th>
+            <th>Status</th>
+        </tr>
+
+        @foreach (var account in Model.Accounts)
+        {
+            <tr>
+
+                <td>
+                    @account.AccountNumber
+                </td>
+
+                <td>
+                    @account.AccountType
+                </td>
+
+                <td>
+                    ₹ @account.Balance
+                </td>
+
+                <td>
+                    @account.Status
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+<hr />
+
+<h3>My Beneficiaries</h3>
+
+@if (Model.Beneficiaries.Count == 0)
+{
+    <p>No beneficiaries found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>Beneficiary Name</th>
+            <th>Account Number</th>
+            <th>IFSC Code</th>
+            <th>Bank Name</th>
+        </tr>
+
+        @foreach (var beneficiary in Model.Beneficiaries)
+        {
+            <tr>
+
+                <td>
+                    @beneficiary.BeneficiaryName
+                </td>
+
+                <td>
+                    @beneficiary.AccountNumber
+                </td>
+
+                <td>
+                    @beneficiary.IFSCCode
+                </td>
+
+                <td>
+                    @beneficiary.BankName
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+<hr />
+
+<h3>My Transactions</h3>
+
+@if (Model.Transactions.Count == 0)
+{
+    <p>No transactions found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+
+        <tr>
+            <th>From Account</th>
+            <th>To Account</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Reference Number</th>
+        </tr>
+
+        @foreach (var transaction in Model.Transactions)
+        {
+            <tr>
+
+                <td>
+                    @transaction.FromAccountNumber
+                </td>
+
+                <td>
+                    @transaction.ToAccountNumber
+                </td>
+
+                <td>
+                    ₹ @transaction.Amount
+                </td>
+
+                <td>
+                    @transaction.TransactionDate
+                </td>
+
+                <td>
+                    @transaction.Status
+                </td>
+
+                <td>
+                    @transaction.ReferenceNumber
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}
+
+<hr />
+
+<h3>Actions</h3>
+
+<br />
+
+@Html.ActionLink(
+    "Transfer Money",
+    "Create",
+    "CustomerTransfer",
+    null,
+    new { @class = "btn btn-primary" }
+)
+
+<span style="margin-left: 10px;"></span>
+
+@Html.ActionLink(
+    "Deposit / Withdrawal",
+    "Create",
+    "CustomerAccountTransaction",
+    null,
+    new { @class = "btn btn-primary" }
+)
+
+<span style="margin-left: 10px;"></span>
+
+@Html.ActionLink(
+    "Manage Beneficiaries",
+    "Index",
+    "CustomerBeneficiary",
+    null,
+    new { @class = "btn btn-primary" }
+)
+
+<span style="margin-left: 10px;"></span>
+
+@Html.ActionLink(
+    "Make Payment",
+    "Index",
+    "CustomerPayment",
+    null,
+    new { @class = "btn btn-success" }
+)
+
+<span style="margin-left: 10px;"></span>
+
+@Html.ActionLink(
+    "Logout",
+    "Logout",
+    "Login",
+    null,
+    new { @class = "btn btn-danger" }
+)
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

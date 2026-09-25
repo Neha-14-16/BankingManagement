@@ -1,0 +1,118 @@
+﻿@model BankingManagement.DTOs.BeneficiaryDTO
+
+@{
+    ViewBag.Title = "Beneficiary Details";
+}
+
+<h2>Beneficiary Details</h2>
+
+<div>
+    <hr />
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.BeneficiaryId
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.BeneficiaryId
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.CustomerId
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.CustomerId
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.BeneficiaryName
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.BeneficiaryName
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.AccountNumber
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.AccountNumber
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.IFSCCode
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.IFSCCode
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.BankName
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.BankName
+            )
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(
+                model => model.CreatedDate
+            )
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(
+                model => model.CreatedDate
+            )
+        </dd>
+
+    </dl>
+</div>
+
+<p>
+
+    @Html.ActionLink(
+        "Edit",
+        "Edit",
+        new { id = Model.BeneficiaryId },
+        new { @class = "btn btn-primary" }
+    )
+
+    @Html.ActionLink(
+        "Back to Beneficiaries",
+        "Index",
+        "Beneficiary",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+
+</p>

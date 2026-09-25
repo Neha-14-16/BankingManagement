@@ -1,0 +1,152 @@
+﻿@model BankingManagement.DTOs.CustomerDTO
+
+@{
+    ViewBag.Title = "Edit Customer";
+}
+
+<h2>Edit Customer</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.CustomerId)
+
+    @Html.HiddenFor(model => model.UserId)
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(
+                model => model.FullName,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.FullName,
+                new { @class = "form-control" }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.FullName,
+                "",
+                new { @class = "text-danger" }
+            )
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            @Html.LabelFor(
+                model => model.Email,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.Email,
+                new
+                {
+                    @class = "form-control",
+                    type = "email"
+                }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.Email,
+                "",
+                new { @class = "text-danger" }
+            )
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            @Html.LabelFor(
+                model => model.PhoneNumber,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.PhoneNumber,
+                new { @class = "form-control" }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.PhoneNumber,
+                "",
+                new { @class = "text-danger" }
+            )
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            @Html.LabelFor(
+                model => model.DateOfBirth,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextBoxFor(
+                model => model.DateOfBirth,
+                "{0:yyyy-MM-dd}",
+                new
+                {
+                    @class = "form-control",
+                    type = "date"
+                }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.DateOfBirth,
+                "",
+                new { @class = "text-danger" }
+            )
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            @Html.LabelFor(
+                model => model.Address,
+                new { @class = "control-label" }
+            )
+
+            @Html.TextAreaFor(
+                model => model.Address,
+                new
+                {
+                    @class = "form-control",
+                    rows = 3
+                }
+            )
+
+            @Html.ValidationMessageFor(
+                model => model.Address,
+                "",
+                new { @class = "text-danger" }
+            )
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+        </button>
+
+        @Html.ActionLink(
+            "Back to List",
+            "Index",
+            "Customer",
+            null,
+            new { @class = "btn btn-secondary" }
+        )
+
+    </div>
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

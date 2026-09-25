@@ -1,0 +1,260 @@
+﻿@model BankingManagement.DTOs.CreatePaymentTransactionDTO
+
+@{
+    ViewBag.Title = "Make Payment";
+}
+
+<h2>Make Payment</h2>
+
+<hr />
+
+@using (Html.BeginForm(
+    "CreateOrder",
+    "CustomerPayment",
+    FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(
+        true,
+        "",
+        new { @class = "text-danger" }
+    )
+
+    <div class="form-group">
+
+        <label>Account Number</label>
+
+        <select name="AccountId"
+                class="form-control"
+                required>
+
+            <option value="">
+                -- Select Account --
+            </option>
+
+            @if (ViewBag.Accounts != null)
+            {
+                foreach (var account in ViewBag.Accounts)
+                {
+                    <option value="@account.AccountId">
+                        @account.AccountNumber -
+                        @account.AccountType
+                    </option>
+                }
+            }
+
+        </select>
+
+        @Html.ValidationMessageFor(
+            model => model.AccountId,
+            "",
+            new { @class = "text-danger" }
+        )
+
+    </div>
+
+    <br />
+
+    <div class="form-group">
+
+        @Html.LabelFor(
+            model => model.Amount
+        )
+
+        @Html.TextBoxFor(
+            model => model.Amount,
+            new
+            {
+                @class = "form-control",
+                type = "number",
+                step = "0.01",
+                min = "0.01",
+                placeholder = "Enter amount"
+            }
+        )
+
+        @Html.ValidationMessageFor(
+            model => model.Amount,
+            "",
+            new { @class = "text-danger" }
+        )
+
+    </div>
+
+    <br />
+
+    <div class="form-group">
+
+        <label>Payment Type</label>
+
+        <select name="PaymentType"
+                class="form-control"
+                required>
+
+            <option value="">
+                -- Select Payment Type --
+            </option>
+
+            <option value="Razorpay">
+                Razorpay
+            </option>
+
+        </select>
+
+        @Html.ValidationMessageFor(
+            model => model.PaymentType,
+            "",
+            new { @class = "text-danger" }
+        )
+
+    </div>
+
+    <br />
+
+    <button type="submit"
+            class="btn btn-primary">
+
+        Create Razorpay Order
+
+    </button>
+}
+
+@if (ViewBag.OrderId != null)
+{
+    <hr />
+
+    <h4>Razorpay Test Order Created</h4>
+
+    <p>
+        Order ID:
+        <strong>@ViewBag.OrderId</strong>
+    </p>
+
+    <p>
+        Payment Amount:
+        <strong>₹ @Model.Amount</strong>
+    </p>
+
+    <hr />
+
+    <h4>Razorpay Test Checkout</h4>
+
+    <p>
+        Razorpay Checkout will open automatically.
+    </p>
+
+    <button type="button"
+            id="openRazorpayButton"
+            class="btn btn-primary"
+            data-key="@BankingManagement.Services.RazorpayConfig.KeyId"
+            data-order-id="@ViewBag.OrderId"
+            data-amount="@((Model.Amount * 100).ToString("0"))">
+
+        Open Razorpay Checkout
+
+    </button>
+
+    <hr />
+
+    <h4>Test Payment Flag</h4>
+
+    <p>
+        No actual payment is required for this project.
+        Select the result you want to simulate.
+    </p>
+
+    <br />
+
+    using (Html.BeginForm(
+        "ProcessPaymentFlag",
+        "CustomerPayment",
+        FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.Hidden(
+            "AccountId",
+            Model.AccountId
+        )
+
+        @Html.Hidden(
+            "Amount",
+            Model.Amount
+        )
+
+        @Html.Hidden(
+            "PaymentType",
+            Model.PaymentType
+        )
+
+        @Html.Hidden(
+            "PaymentFlag",
+            "Success"
+        )
+
+        @Html.Hidden(
+            "RazorpayOrderId",
+            ViewBag.OrderId as string
+        )
+
+        <button type="submit"
+                class="btn btn-success">
+
+            Test Successful Payment
+
+        </button>
+    }
+
+    <br />
+    <br />
+
+    using (Html.BeginForm(
+        "ProcessPaymentFlag",
+        "CustomerPayment",
+        FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.Hidden(
+            "AccountId",
+            Model.AccountId
+        )
+
+        @Html.Hidden(
+            "Amount",
+            Model.Amount
+        )
+
+        @Html.Hidden(
+            "PaymentType",
+            Model.PaymentType
+        )
+
+        @Html.Hidden(
+            "PaymentFlag",
+            "Failed"
+        )
+
+        @Html.Hidden(
+            "RazorpayOrderId",
+            ViewBag.OrderId as string
+        )
+
+        <button type="submit"
+                class="btn btn-danger">
+
+            Test Failed Payment
+
+        </button>
+    }
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script src="@Url.Content("~/Scripts/razorpay-payment.js")"></script>
+}

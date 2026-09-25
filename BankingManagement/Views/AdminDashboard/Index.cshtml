@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Administrator Dashboard";
+}
+
+<h2>Administrator Dashboard</h2>
+
+<hr />
+
+<h3>Welcome, Administrator</h3>
+
+<br />
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <h4>Customer Management</h4>
+
+        <p>
+            @Html.ActionLink(
+                "Customers",
+                "Index",
+                "Customer",
+                null,
+                new { @class = "btn btn-primary" }
+            )
+        </p>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <h4>Account Management</h4>
+
+        <p>
+            @Html.ActionLink(
+                "Accounts",
+                "Index",
+                "Account",
+                null,
+                new { @class = "btn btn-primary" }
+            )
+        </p>
+
+    </div>
+
+</div>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <h4>Banking Transactions</h4>
+
+        <p>
+            @Html.ActionLink(
+                "Banking Transactions",
+                "Index",
+                "BankingTransaction",
+                null,
+                new { @class = "btn btn-primary" }
+            )
+        </p>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <h4>Payment Transactions</h4>
+
+        <p>
+            @Html.ActionLink(
+                "Payment Transactions",
+                "Index",
+                "PaymentTransaction",
+                null,
+                new { @class = "btn btn-primary" }
+            )
+        </p>
+
+    </div>
+
+</div>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <h4>Deposit / Withdrawal</h4>
+
+        <p>
+            @Html.ActionLink(
+                "Deposit / Withdrawal",
+                "Index",
+                "AccountTransaction",
+                null,
+                new { @class = "btn btn-primary" }
+            )
+        </p>
+
+    </div>
+
+</div>
+
+<hr />
+
+<br />
+
+@Html.ActionLink(
+    "Logout",
+    "Logout",
+    "Login",
+    null,
+    new { @class = "btn btn-danger" }
+)

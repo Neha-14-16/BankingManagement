@@ -1,0 +1,63 @@
+﻿@model BankingManagement.DTOs.AccountTransactionDTO
+
+@{
+    ViewBag.Title = "Transaction Details";
+}
+
+<h2>Transaction Details</h2>
+
+<hr />
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Account Number</th>
+        <td>@Model.AccountNumber</td>
+    </tr>
+
+    <tr>
+        <th>Transaction Type</th>
+        <td>@Model.TransactionType</td>
+    </tr>
+
+    <tr>
+        <th>Amount</th>
+        <td>₹ @Model.Amount</td>
+    </tr>
+
+    <tr>
+        <th>Transaction Date</th>
+        <td>@Model.TransactionDate</td>
+    </tr>
+
+    <tr>
+        <th>Status</th>
+        <td>@Model.Status</td>
+    </tr>
+
+    <tr>
+        <th>Reference Number</th>
+        <td>@Model.ReferenceNumber</td>
+    </tr>
+
+</table>
+
+<br />
+
+@Html.ActionLink(
+    "Back to Transactions",
+    "Index",
+    "AccountTransaction",
+    null,
+    new { @class = "btn btn-secondary" }
+)
+
+<span style="margin-left:10px;"></span>
+
+@Html.ActionLink(
+    "Delete",
+    "Delete",
+    "AccountTransaction",
+    new { id = Model.AccountTransactionId },
+    new { @class = "btn btn-danger" }
+)
