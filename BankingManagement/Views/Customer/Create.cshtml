@@ -4,183 +4,413 @@
     ViewBag.Title = "Register Customer";
 }
 
-<h2>Register Customer</h2>
+<div class="bank-page-header">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+    <div>
 
-    <div class="form-horizontal">
+        <p class="section-label">
+            CUSTOMER MANAGEMENT
+        </p>
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Username,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.Username,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Username,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Password,
-                new { @class = "control-label" }
-            )
-
-            @Html.PasswordFor(
-                model => model.Password,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Password,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.FullName,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.FullName,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.FullName,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Email,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.Email,
-                new
-                {
-                    @class = "form-control",
-                    type = "email"
-                }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Email,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.PhoneNumber,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.PhoneNumber,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.PhoneNumber,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.DateOfBirth,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.DateOfBirth,
-                "{0:yyyy-MM-dd}",
-                new
-                {
-                    @class = "form-control",
-                    type = "date"
-                }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.DateOfBirth,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Address,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextAreaFor(
-                model => model.Address,
-                new
-                {
-                    @class = "form-control",
-                    rows = 3
-                }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Address,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary">
+        <h2>
             Register Customer
-        </button>
+        </h2>
 
-        @Html.ActionLink(
-            "Back to List",
-            "Index",
-            "Customer",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <p class="bank-page-subtitle">
+            Create a new customer profile and banking login.
+        </p>
 
     </div>
-}
+
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
+
+</div>
+
+
+<div class="transfer-layout">
+
+    <!-- =====================================================
+         CUSTOMER REGISTRATION FORM
+         ===================================================== -->
+
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                👤
+            </div>
+
+            <div>
+
+                <h3>
+                    Customer Information
+                </h3>
+
+                <p>
+                    Enter the customer's login and personal details.
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" }
+            )
+
+
+            <!-- =================================================
+                 LOGIN DETAILS
+                 ================================================= -->
+
+            <div class="form-section-title">
+                Login Details
+            </div>
+
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Username,
+                    "Username"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Username,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter username"
+                    }
+                )
+
+                <small class="form-help">
+                    This username will be used by the customer to sign in.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Username,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Password,
+                    "Password"
+                )
+
+                @Html.PasswordFor(
+                    model => model.Password,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter password"
+                    }
+                )
+
+                <small class="form-help">
+                    Set the initial password for the customer account.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Password,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 PERSONAL DETAILS
+                 ================================================= -->
+
+            <div class="form-section-title">
+                Personal Details
+            </div>
+
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.FullName,
+                    "Full Name"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.FullName,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter full name"
+                    }
+                )
+
+                @Html.ValidationMessageFor(
+                    model => model.FullName,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <div class="customer-form-row">
+
+                <div class="bank-form-group">
+
+                    @Html.LabelFor(
+                        model => model.Email,
+                        "Email Address"
+                    )
+
+                    @Html.TextBoxFor(
+                        model => model.Email,
+                        new
+                        {
+                            @class = "form-control",
+                            type = "email",
+                            placeholder = "example@email.com"
+                        }
+                    )
+
+                    @Html.ValidationMessageFor(
+                        model => model.Email,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+
+                </div>
+
+
+                <div class="bank-form-group">
+
+                    @Html.LabelFor(
+                        model => model.PhoneNumber,
+                        "Phone Number"
+                    )
+
+                    @Html.TextBoxFor(
+                        model => model.PhoneNumber,
+                        new
+                        {
+                            @class = "form-control",
+                            placeholder = "Enter phone number"
+                        }
+                    )
+
+                    @Html.ValidationMessageFor(
+                        model => model.PhoneNumber,
+                        "",
+                        new { @class = "text-danger" }
+                    )
+
+                </div>
+
+            </div>
+
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.DateOfBirth,
+                    "Date of Birth"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.DateOfBirth,
+                    "{0:yyyy-MM-dd}",
+                    new
+                    {
+                        @class = "form-control",
+                        type = "date"
+                    }
+                )
+
+                @Html.ValidationMessageFor(
+                    model => model.DateOfBirth,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Address,
+                    "Address"
+                )
+
+                @Html.TextAreaFor(
+                    model => model.Address,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = 4,
+                        placeholder = "Enter customer address"
+                    }
+                )
+
+                @Html.ValidationMessageFor(
+                    model => model.Address,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 SECURITY
+                 ================================================= -->
+
+            <div class="transaction-security-note">
+
+                <span class="security-icon">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure Customer Registration
+                    </strong>
+
+                    <p>
+                        The customer will be registered with a customer login and an active account profile.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Register Customer
+
+                </button>
+
+                @Html.ActionLink(
+                    "Back to Customers",
+                    "Index",
+                    "Customer",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION CARD
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Registration Information
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Access
+            </span>
+
+            <strong>
+                Customer Login
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Role
+            </span>
+
+            <strong>
+                Customer
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account Status
+            </span>
+
+            <strong class="processing-text">
+                Active
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Registration
+            </span>
+
+            <strong>
+                Administrator Controlled
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                Verify the customer's username, email, phone number and personal details before completing registration.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @section Scripts
 {

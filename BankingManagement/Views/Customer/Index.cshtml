@@ -1,112 +1,376 @@
 ﻿@model IEnumerable<BankingManagement.DTOs.CustomerDTO>
 
 @{
-    ViewBag.Title = "Customers";
+    ViewBag.Title = "Customer Management";
 }
 
-<h2>Customers</h2>
+<div class="admin-page-header">
 
-<p>
+    <div>
+
+        <p class="section-label">
+            CUSTOMER MANAGEMENT
+        </p>
+
+        <h2>
+            Customers
+        </h2>
+
+        <p class="bank-page-subtitle">
+            View and manage registered banking customers.
+        </p>
+
+    </div>
+
+    <div>
+        @Html.ActionLink(
+            "＋ Register New Customer",
+            "Create",
+            "Customer",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUCCESS / ERROR MESSAGES
+     ===================================================== -->
+
+@if (TempData["CustomerSuccess"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["CustomerSuccess"]
+    </div>
+}
+
+@if (TempData["CustomerDeleteError"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["CustomerDeleteError"]
+    </div>
+}
+
+
+<!-- =====================================================
+     SUMMARY
+     ===================================================== -->
+
+<div class="row dashboard-summary">
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL CUSTOMERS
+            </div>
+
+            <div class="bank-card-value">
+                @Model.Count()
+            </div>
+
+            <div class="bank-card-subtitle">
+                Registered customers
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                CUSTOMER RECORDS
+            </div>
+
+            <div class="admin-summary-icon">
+                👥
+            </div>
+
+            <div class="bank-card-subtitle">
+                Customer information and profiles
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                ADMIN ACTIONS
+            </div>
+
+            <div class="admin-summary-icon">
+                ⚙
+            </div>
+
+            <div class="bank-card-subtitle">
+                Create, edit, view and remove records
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CUSTOMER TABLE
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            REGISTERED CUSTOMERS
+        </p>
+
+        <h3>
+            Customer Directory
+        </h3>
+
+    </div>
+
+</div>
+
+
+@if (Model == null || !Model.Any())
+{
+    <div class="bank-card empty-state">
+
+        <div class="empty-icon">
+            👥
+        </div>
+
+        <h4>
+            No Customers Found
+        </h4>
+
+        <p>
+            There are currently no registered customers.
+        </p>
+
+        @Html.ActionLink(
+            "Register New Customer",
+            "Create",
+            "Customer",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+}
+else
+{
+    <div class="bank-card admin-table-card">
+
+        <div class="table-responsive">
+
+            <table class="table banking-table admin-customer-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Customer ID
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Date of Birth
+                        </th>
+
+                        <th>
+                            Address
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="admin-customer-name">
+
+                                    <div class="admin-customer-avatar">
+
+                                        @if (!string.IsNullOrEmpty(item.FullName))
+                                        {
+                                            @item.FullName.Substring(0, 1).ToUpper()
+                                        }
+                                        else
+                                        {
+                                            <span>?</span>
+                                        }
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @item.FullName
+                                        </strong>
+
+                                        <span>
+                                            User ID: @item.UserId
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                @item.CustomerId
+                            </td>
+
+
+                            <td>
+                                @item.Email
+                            </td>
+
+
+                            <td>
+                                @item.PhoneNumber
+                            </td>
+
+
+                            <td>
+                                @item.DateOfBirth.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <td>
+                                @item.Address
+                            </td>
+
+
+                            <td>
+                                @item.CreatedDate.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <td>
+
+                                <div class="admin-table-actions">
+
+                                    <!-- EDIT -->
+
+                                    @Html.ActionLink(
+                                        "Edit",
+                                        "Edit",
+                                        new { id = item.CustomerId },
+                                        new { @class = "btn btn-sm btn-outline-primary" }
+                                    )
+
+
+                                    <!-- DETAILS -->
+
+                                    @Html.ActionLink(
+                                        "Details",
+                                        "Details",
+                                        new { id = item.CustomerId },
+                                        new { @class = "btn btn-sm btn-outline-info" }
+                                    )
+
+
+                                    <!-- DIRECT DELETE -->
+
+                                    @using (Html.BeginForm(
+                                        "DeleteConfirmed",
+                                        "Customer",
+                                        FormMethod.Post,
+                                        new
+                                        {
+                                            @class = "customer-delete-form"
+                                        }
+                                    ))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        @Html.Hidden(
+                                            "id",
+                                            item.CustomerId
+                                        )
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('Are you sure you want to delete @item.FullName?');">
+
+                                            Delete
+
+                                        </button>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     BACK
+     ===================================================== -->
+
+<div class="admin-page-footer">
+
     @Html.ActionLink(
-        "Register New Customer",
-        "Create",
-        "Customer",
+        "← Back to Administrator Dashboard",
+        "Index",
+        "AdminDashboard",
         null,
-        new { @class = "btn btn-primary" }
+        new { @class = "btn btn-secondary" }
     )
-</p>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.UserId)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.FullName)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.Address)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-
-            <td>
-                @Html.ActionLink(
-                    "Edit",
-                    "Edit",
-                    new { id = item.CustomerId }
-                )
-                |
-                @Html.ActionLink(
-                    "Details",
-                    "Details",
-                    new { id = item.CustomerId }
-                )
-                |
-                @Html.ActionLink(
-                    "Delete",
-                    "DeleteUser",
-                    new { id = item.CustomerId }
-                )
-            </td>
-        </tr>
-    }
-</table>
+</div>

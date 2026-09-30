@@ -1,40 +1,409 @@
-﻿@model IEnumerable<BankingManagement.DTOs.UserDTO>
+﻿@using System.Linq
+@model IEnumerable<BankingManagement.DTOs.UserDTO>
 
 @{
-    ViewBag.Title = "Users";
+    ViewBag.Title = "User Management";
+
+    int totalUsers = Model == null ? 0 : Model.Count();
+
+    int activeUsers = Model == null
+        ? 0
+        : Model.Count(u => u.IsActive);
+
+    int adminUsers = Model == null
+        ? 0
+        : Model.Count(
+            u => !string.IsNullOrEmpty(u.Role) &&
+                 u.Role.ToLower() == "admin"
+        );
+
+    int customerUsers = Model == null
+        ? 0
+        : Model.Count(
+            u => !string.IsNullOrEmpty(u.Role) &&
+                 u.Role.ToLower() == "customer"
+        );
 }
 
-<h2>Users</h2>
+<div class="admin-page-header">
 
-<p>
-    @Html.ActionLink("Create New User", "Create")
-</p>
+    <div>
 
-<table class="table table-bordered">
-    <tr>
-        <th>User ID</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Active</th>
-        <th>Created Date</th>
-        <th>Actions</th>
-    </tr>
+        <p class="section-label">
+            USER MANAGEMENT
+        </p>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.UserId</td>
-            <td>@item.Username</td>
-            <td>@item.Email</td>
-            <td>@item.Role</td>
-            <td>@item.IsActive</td>
-            <td>@item.CreatedDate</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
-                @Html.ActionLink("Delete", "DeleteUser", new { id = item.UserId })
-            </td>
-        </tr>
-    }
-</table>
+        <h2>
+            Users
+        </h2>
+
+        <p class="bank-page-subtitle">
+            Manage application users, roles and account access.
+        </p>
+
+    </div>
+
+    <div>
+
+        @Html.ActionLink(
+            "＋ Create New User",
+            "Create",
+            "User",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUMMARY CARDS
+     ===================================================== -->
+
+<div class="row dashboard-summary">
+
+    <div class="col-md-3">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL USERS
+            </div>
+
+            <div class="bank-card-value">
+                @totalUsers
+            </div>
+
+            <div class="bank-card-subtitle">
+                Registered application users
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                ACTIVE USERS
+            </div>
+
+            <div class="bank-card-value">
+                @activeUsers
+            </div>
+
+            <div class="bank-card-subtitle">
+                Users with active access
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                ADMIN USERS
+            </div>
+
+            <div class="bank-card-value">
+                @adminUsers
+            </div>
+
+            <div class="bank-card-subtitle">
+                Administrator accounts
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                CUSTOMER USERS
+            </div>
+
+            <div class="bank-card-value">
+                @customerUsers
+            </div>
+
+            <div class="bank-card-subtitle">
+                Customer login accounts
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     USER DIRECTORY
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            REGISTERED USERS
+        </p>
+
+        <h3>
+            User Directory
+        </h3>
+
+    </div>
+
+</div>
+
+
+@if (Model == null || !Model.Any())
+{
+    <div class="bank-card empty-state">
+
+        <div class="empty-icon">
+            +
+        </div>
+
+        <h4>
+            No Users Found
+        </h4>
+
+        <p>
+            There are currently no users registered in the system.
+        </p>
+
+        @Html.ActionLink(
+            "Create New User",
+            "Create",
+            "User",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+}
+else
+{
+    <div class="bank-card admin-table-card">
+
+        <div class="table-responsive">
+
+            <table class="table banking-table admin-user-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            User
+                        </th>
+
+                        <th>
+                            User ID
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Role
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="admin-user-name">
+
+                                    <div class="admin-user-avatar">
+
+                                        @if (!string.IsNullOrEmpty(item.Username))
+                                        {
+                                            @item.Username.Substring(0, 1).ToUpper()
+                                        }
+                                        else
+                                        {
+                                            <span>?</span>
+                                        }
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @item.Username
+                                        </strong>
+
+                                        <span>
+                                            User Account
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                @item.UserId
+                            </td>
+
+
+                            <td>
+                                @item.Email
+                            </td>
+
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.Role) &&
+                                    item.Role.ToLower() == "admin")
+                                {
+                                    <span class="role-admin-badge">
+                                        Admin
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="role-customer-badge">
+                                        Customer
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                @if (item.IsActive)
+                                {
+                                    <span class="status-active">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-inactive">
+                                        Inactive
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                @item.CreatedDate.ToString("dd MMM yyyy")
+
+                                <small class="transaction-time">
+                                    @item.CreatedDate.ToString("hh:mm tt")
+                                </small>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="admin-table-actions">
+
+                                    @Html.ActionLink(
+                                        "Edit",
+                                        "Edit",
+                                        "User",
+                                        new { id = item.UserId },
+                                        new
+                                        {
+                                            @class =
+                                                "btn btn-sm btn-outline-primary"
+                                        }
+                                    )
+
+                                    @Html.ActionLink(
+                                        "Details",
+                                        "Details",
+                                        "User",
+                                        new { id = item.UserId },
+                                        new
+                                        {
+                                            @class =
+                                                "btn btn-sm btn-outline-info"
+                                        }
+                                    )
+
+                                    @Html.ActionLink(
+                                        "Delete",
+                                        "DeleteUser",
+                                        "User",
+                                        new { id = item.UserId },
+                                        new
+                                        {
+                                            @class =
+                                                "btn btn-sm btn-outline-danger"
+                                        }
+                                    )
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}
+
+
+<div class="admin-page-footer">
+
+    @Html.ActionLink(
+        "← Back to Administrator Dashboard",
+        "Index",
+        "AdminDashboard",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+
+</div>

@@ -4,76 +4,400 @@
     ViewBag.Title = "Reset Password";
 }
 
-<h2>Reset Password</h2>
+<link rel="stylesheet"
+      href="@Url.Content("~/Content/ResetPassword.css?v=2")" />
 
-<p>Enter your new password below.</p>
 
-@using (Html.BeginForm("Index", "ResetPassword", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+<div class="reset-password-page">
 
-    @Html.HiddenFor(model => model.Token)
+    <div class="reset-password-card">
 
-    <div class="form-horizontal">
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- =================================================
+             LEFT SECURITY PANEL
+             ================================================= -->
 
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.NewPassword,
-                new { @class = "control-label" }
-            )
+        <div class="reset-security-panel">
 
-            @Html.PasswordFor(
-                model => model.NewPassword,
-                new { @class = "form-control" }
-            )
+            <div class="reset-security-icon">
+                🔑
+            </div>
 
-            @Html.ValidationMessageFor(
-                model => model.NewPassword,
-                "",
-                new { @class = "text-danger" }
-            )
+            <div class="reset-security-label">
+                ACCOUNT SECURITY
+            </div>
+
+            <h2>
+                Create a New Password
+            </h2>
+
+            <p class="reset-security-description">
+                Choose a strong password to protect your
+                Banking Management account.
+            </p>
+
+
+            <div class="reset-security-points">
+
+                <div class="reset-security-point">
+
+                    <div class="reset-check">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Secure Password
+                        </strong>
+
+                        <p>
+                            Use a password that is difficult
+                            for others to guess.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="reset-security-point">
+
+                    <div class="reset-check">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Confirm Your Password
+                        </strong>
+
+                        <p>
+                            Enter the same password again
+                            to confirm your choice.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="reset-security-point">
+
+                    <div class="reset-check">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            One-Time Reset
+                        </strong>
+
+                        <p>
+                            Your password reset link cannot
+                            be reused after a successful reset.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="reset-security-footer">
+
+                <span>
+                    🛡
+                </span>
+
+                <p>
+                    Keep your password private and never
+                    share your reset link.
+                </p>
+
+            </div>
+
         </div>
 
-        <br />
 
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.ConfirmPassword,
-                new { @class = "control-label" }
-            )
 
-            @Html.PasswordFor(
-                model => model.ConfirmPassword,
-                new { @class = "form-control" }
-            )
+        <!-- =================================================
+             RIGHT FORM PANEL
+             ================================================= -->
 
-            @Html.ValidationMessageFor(
-                model => model.ConfirmPassword,
-                "",
-                new { @class = "text-danger" }
-            )
+        <div class="reset-form-panel">
+
+
+            <!-- HEADER -->
+
+            <div class="reset-form-header">
+
+                <div class="reset-form-label">
+                    PASSWORD RECOVERY
+                </div>
+
+                <h1>
+                    Reset Password
+                </h1>
+
+                <p>
+                    Enter and confirm your new password below.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 VALIDATION ERROR
+                 ================================================= -->
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="reset-error-message">
+
+                    <div class="reset-message-icon">
+                        !
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Unable to reset password
+                        </strong>
+
+                        @Html.ValidationSummary(
+                            true,
+                            "",
+                            new
+                            {
+                                @class = "reset-validation-summary"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- =================================================
+                 RESET FORM
+                 ================================================= -->
+
+            @using (Html.BeginForm(
+                "Index",
+                "ResetPassword",
+                FormMethod.Post,
+                new
+                {
+                    @class = "reset-password-form"
+                }
+            ))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(
+                    model => model.Token
+                )
+
+
+                <!-- =================================================
+                     NEW PASSWORD
+                     ================================================= -->
+
+                <div class="reset-form-group">
+
+                    @Html.LabelFor(
+                        model => model.NewPassword,
+                        "New Password",
+                        new
+                        {
+                            @class = "reset-form-label-text"
+                        }
+                    )
+
+                    <div class="reset-input-wrapper">
+
+                        <span class="reset-input-icon">
+                            🔒
+                        </span>
+
+                        @Html.PasswordFor(
+                            model => model.NewPassword,
+                            new
+                            {
+                                @class = "reset-password-input",
+                                placeholder = "Enter new password",
+                                autocomplete = "new-password",
+                                id = "newPassword"
+                            }
+                        )
+
+                        <button type="button"
+                                class="reset-password-toggle"
+                                data-password-target="newPassword"
+                                title="Show password">
+
+                            👁
+
+                        </button>
+
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.NewPassword,
+                        "",
+                        new
+                        {
+                            @class = "reset-field-error"
+                        }
+                    )
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CONFIRM PASSWORD
+                     ================================================= -->
+
+                <div class="reset-form-group">
+
+                    @Html.LabelFor(
+                        model => model.ConfirmPassword,
+                        "Confirm New Password",
+                        new
+                        {
+                            @class = "reset-form-label-text"
+                        }
+                    )
+
+                    <div class="reset-input-wrapper">
+
+                        <span class="reset-input-icon">
+                            🔒
+                        </span>
+
+                        @Html.PasswordFor(
+                            model => model.ConfirmPassword,
+                            new
+                            {
+                                @class = "reset-password-input",
+                                placeholder = "Confirm new password",
+                                autocomplete = "new-password",
+                                id = "confirmPassword"
+                            }
+                        )
+
+                        <button type="button"
+                                class="reset-password-toggle"
+                                data-password-target="confirmPassword"
+                                title="Show password">
+
+                            👁
+
+                        </button>
+
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.ConfirmPassword,
+                        "",
+                        new
+                        {
+                            @class = "reset-field-error"
+                        }
+                    )
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PASSWORD TIPS
+                     ================================================= -->
+
+                <div class="reset-password-tips">
+
+                    <strong>
+                        Password Tips
+                    </strong>
+
+                    <p>
+                        Use a combination of letters, numbers and
+                        special characters for better security.
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SUBMIT
+                     ================================================= -->
+
+                <button type="submit"
+                        class="reset-submit-button">
+
+                    <span>
+                        Reset Password
+                    </span>
+
+                    <span class="reset-button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =================================================
+                     BACK TO LOGIN
+                     ================================================= -->
+
+                <div class="reset-back-link">
+
+                    @Html.ActionLink(
+                        "← Back to Login",
+                        "Index",
+                        "Login"
+                    )
+
+                </div>
+
+            }
+
+
+            <!-- =================================================
+                 BOTTOM NOTE
+                 ================================================= -->
+
+            <div class="reset-bottom-note">
+
+                <span>
+                    🔐
+                </span>
+
+                <p>
+                    After a successful reset, you will be taken
+                    to the Login page to sign in with your new password.
+                </p>
+
+            </div>
+
         </div>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary">
-            Reset Password
-        </button>
-
-        @Html.ActionLink(
-            "Back to Login",
-            "Index",
-            "Login",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
 
     </div>
-}
+
+</div>
+
 
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="@Url.Content("~/Scripts/reset-password.js?v=2")"></script>
 }

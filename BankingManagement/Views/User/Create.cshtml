@@ -4,78 +4,361 @@
     ViewBag.Title = "Create User";
 }
 
-<h2>Create User</h2>
+<div class="bank-page-header">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+    <div>
 
-    <div class="form-horizontal">
+        <p class="section-label">
+            USER MANAGEMENT
+        </p>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Username, new { @class = "control-label" })
-            @Html.TextBoxFor(
-                model => model.Username,
-                new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.Username)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, new { @class = "control-label" })
-            @Html.TextBoxFor(
-                model => model.Email,
-                new { @class = "form-control", type = "email" }
-            )
-            @Html.ValidationMessageFor(model => model.Email)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PasswordHash, new { @class = "control-label" })
-            @Html.PasswordFor(
-                model => model.PasswordHash,
-                new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.PasswordHash)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role, new { @class = "control-label" })
-            @Html.TextBoxFor(
-                model => model.Role,
-                new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.Role)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
-            @Html.CheckBoxFor(model => model.IsActive)
-        </div>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary">
+        <h2>
             Create User
-        </button>
+        </h2>
 
-        @Html.ActionLink(
-            "Back to List",
-            "Index",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <p class="bank-page-subtitle">
+            Create a new application user and assign access details.
+        </p>
 
     </div>
-}
+
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
+
+</div>
+
+
+<div class="transfer-layout">
+
+    <!-- =====================================================
+         USER FORM
+         ===================================================== -->
+
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                👤
+            </div>
+
+            <div>
+
+                <h3>
+                    User Information
+                </h3>
+
+                <p>
+                    Enter the login and access details for the new user.
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" }
+            )
+
+
+            <!-- USERNAME -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Username,
+                    "Username"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Username,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter username"
+                    }
+                )
+
+                <small class="form-help">
+                    Enter the username that will be used for login.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Username,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Email,
+                    "Email Address"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Email,
+                    new
+                    {
+                        @class = "form-control",
+                        type = "email",
+                        placeholder = "example@email.com"
+                    }
+                )
+
+                <small class="form-help">
+                    Enter the user's registered email address.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Email,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.PasswordHash,
+                    "Password"
+                )
+
+                @Html.PasswordFor(
+                    model => model.PasswordHash,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter password"
+                    }
+                )
+
+                <small class="form-help">
+                    Set the initial login password for the user.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.PasswordHash,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- ROLE -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Role,
+                    "User Role"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Role,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Admin or Customer"
+                    }
+                )
+
+                <small class="form-help">
+                    Enter the role that determines the user's access.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Role,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- ACTIVE -->
+
+            <div class="bank-form-group">
+
+                <label>
+                    Account Status
+                </label>
+
+                <div class="user-status-toggle">
+
+                    @Html.CheckBoxFor(
+                        model => model.IsActive,
+                        new
+                        {
+                            @class = "user-active-checkbox"
+                        }
+                    )
+
+                    <div>
+
+                        <strong>
+                            Active User
+                        </strong>
+
+                        <small>
+                            Allow the user to log in to the application.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="transaction-security-note">
+
+                <span class="security-icon">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure User Registration
+                    </strong>
+
+                    <p>
+                        Verify the username, email, role and active status before creating the user.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Create User
+
+                </button>
+
+                @Html.ActionLink(
+                    "Back to Users",
+                    "Index",
+                    "User",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION CARD
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            User Information
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Login
+            </span>
+
+            <strong>
+                Username + Password
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Role
+            </span>
+
+            <strong>
+                Admin / Customer
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Status
+            </span>
+
+            <strong class="processing-text">
+                Active
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Access Control
+            </span>
+
+            <strong>
+                Role Based
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                Choose the user's role carefully because application access is controlled by role.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @section Scripts
 {

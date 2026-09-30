@@ -5,6 +5,7 @@ namespace BankingManagement.DTOs
 {
     public class AccountDTO
     {
+        public string CustomerName { get; set; }
         public int AccountId { get; set; }
 
         public int CustomerId { get; set; }

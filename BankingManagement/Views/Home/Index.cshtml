@@ -2,32 +2,346 @@
     ViewBag.Title = "Home Page";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
+<main class="home-page">
+
+    <!-- =====================================================
+         HERO SECTION
+         ===================================================== -->
+
+    <section class="home-hero">
+
+        <div class="home-hero-content">
+
+            <span class="home-badge">
+                🏦 SECURE BANKING PLATFORM
+            </span>
+
+            <h1>
+                Banking Management
+            </h1>
+
+            <p class="home-hero-text">
+                A simple and secure banking platform to manage
+                customers, accounts, transactions and payments.
+            </p>
+
+            <div class="home-hero-actions">
+
+                @if (Session["UserId"] != null)
+                {
+                    if (Session["Role"] != null &&
+                        Session["Role"].ToString().ToLower() == "admin")
+                    {
+                        @Html.ActionLink(
+                            "Go to Admin Dashboard",
+                            "Index",
+                            "AdminDashboard",
+                            null,
+                            new { @class = "home-primary-btn" }
+                        )
+                    }
+                    else
+                    {
+                        @Html.ActionLink(
+                            "Go to My Dashboard",
+                            "Index",
+                            "CustomerDashboard",
+                            null,
+                            new { @class = "home-primary-btn" }
+                        )
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink(
+                        "Login to Banking Portal",
+                        "Index",
+                        "Login",
+                        null,
+                        new { @class = "home-primary-btn" }
+                    )
+                }
+
+                @Html.ActionLink(
+                    "Learn About the System",
+                    "About",
+                    "Home",
+                    null,
+                    new { @class = "home-secondary-btn" }
+                )
+
+            </div>
+
+        </div>
+
+
+        <!-- Hero Visual -->
+
+        <div class="home-hero-visual">
+
+            <div class="home-bank-card">
+
+                <div class="home-bank-card-top">
+
+                    <span>
+                        BANKING
+                    </span>
+
+                    <span>
+                        ✦
+                    </span>
+
+                </div>
+
+                <div class="home-chip">
+                    ▰
+                </div>
+
+                <div class="home-card-number">
+                    •••• &nbsp; •••• &nbsp; •••• &nbsp; 2026
+                </div>
+
+                <div class="home-card-bottom">
+
+                    <div>
+                        <small>
+                            ACCOUNT HOLDER
+                        </small>
+
+                        <strong>
+                            BANKING USER
+                        </strong>
+                    </div>
+
+                    <div class="home-card-symbol">
+                        ◉
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </section>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
+
+    <!-- =====================================================
+         FEATURES
+         ===================================================== -->
+
+    <section class="home-features">
+
+        <div class="home-section-heading">
+
+            <span class="section-label">
+                PLATFORM FEATURES
+            </span>
+
+            <h2>
+                Everything You Need in One Place
+            </h2>
+
             <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
+                Manage essential banking operations through a
+                centralized and easy-to-use platform.
             </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
-    </div>
+
+        </div>
+
+
+        <div class="home-feature-grid">
+
+            <div class="home-feature-card">
+
+                <div class="home-feature-icon">
+                    👤
+                </div>
+
+                <h3>
+                    Customer Management
+                </h3>
+
+                <p>
+                    Create and manage customer profiles,
+                    personal information and account access.
+                </p>
+
+            </div>
+
+
+            <div class="home-feature-card">
+
+                <div class="home-feature-icon">
+                    💳
+                </div>
+
+                <h3>
+                    Account Management
+                </h3>
+
+                <p>
+                    Manage bank accounts, balances, account
+                    types and account status.
+                </p>
+
+            </div>
+
+
+            <div class="home-feature-card">
+
+                <div class="home-feature-icon">
+                    ⇄
+                </div>
+
+                <h3>
+                    Transactions
+                </h3>
+
+                <p>
+                    Handle transfers, deposits and withdrawals
+                    with transaction references and status.
+                </p>
+
+            </div>
+
+
+            <div class="home-feature-card">
+
+                <div class="home-feature-icon">
+                    💰
+                </div>
+
+                <h3>
+                    Payments
+                </h3>
+
+                <p>
+                    Record customer payments and maintain a
+                    clear payment transaction history.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SECURITY SECTION
+         ===================================================== -->
+
+    <section class="home-security-section">
+
+        <div class="home-security-icon">
+            🔐
+        </div>
+
+        <div>
+
+            <span class="section-label">
+                SECURITY
+            </span>
+
+            <h2>
+                Built Around Secure Banking Operations
+            </h2>
+
+            <p>
+                Role-based access, password recovery and
+                transaction validation help keep banking
+                operations organized and protected.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK ACCESS
+         ===================================================== -->
+
+    <section class="home-quick-access">
+
+        <div class="home-section-heading">
+
+            <span class="section-label">
+                QUICK ACCESS
+            </span>
+
+            <h2>
+                Get Started
+            </h2>
+
+        </div>
+
+
+        <div class="home-quick-grid">
+
+            @if (Session["UserId"] != null)
+            {
+                if (Session["Role"] != null &&
+                    Session["Role"].ToString().ToLower() == "admin")
+                {
+                    @Html.ActionLink(
+                        "Admin Dashboard",
+                        "Index",
+                        "AdminDashboard",
+                        null,
+                        new { @class = "home-quick-card" }
+                    )
+                }
+                else
+                {
+                    @Html.ActionLink(
+                        "Customer Dashboard",
+                        "Index",
+                        "CustomerDashboard",
+                        null,
+                        new { @class = "home-quick-card" }
+                    )
+
+                    @Html.ActionLink(
+                        "Make a Payment",
+                        "Index",
+                        "CustomerPayment",
+                        null,
+                        new { @class = "home-quick-card" }
+                    )
+                }
+            }
+            else
+            {
+                @Html.ActionLink(
+                    "Login",
+                    "Index",
+                    "Login",
+                    null,
+                    new { @class = "home-quick-card" }
+                )
+
+                @Html.ActionLink(
+                    "About Banking Management",
+                    "About",
+                    "Home",
+                    null,
+                    new { @class = "home-quick-card" }
+                )
+
+                @Html.ActionLink(
+                    "Contact",
+                    "Contact",
+                    "Home",
+                    null,
+                    new { @class = "home-quick-card" }
+                )
+            }
+
+        </div>
+
+    </section>
+
 </main>
+

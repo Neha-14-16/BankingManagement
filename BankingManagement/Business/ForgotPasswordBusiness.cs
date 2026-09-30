@@ -11,17 +11,50 @@ namespace BankingManagement.Business
     {
         private readonly IGenericRepository<User> _repository;
 
-        public ForgotPasswordBusiness(IGenericRepository<User> repository)
+        public ForgotPasswordBusiness(
+            IGenericRepository<User> repository)
         {
             _repository = repository;
         }
 
-        public string GenerateResetToken(ForgotPasswordDTO forgotPasswordDTO)
+        public string GenerateResetToken(
+            ForgotPasswordDTO forgotPasswordDTO)
         {
+            if (forgotPasswordDTO == null)
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                forgotPasswordDTO.Username))
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                forgotPasswordDTO.Email))
+            {
+                return null;
+            }
+
+            string username =
+                forgotPasswordDTO.Username.Trim();
+
+            string email =
+                forgotPasswordDTO.Email.Trim();
+
             var users = _repository.GetAll();
 
             var user = users.FirstOrDefault(
-                u => u.Email == forgotPasswordDTO.Email
+                u =>
+                    !string.IsNullOrEmpty(u.Username) &&
+                    !string.IsNullOrEmpty(u.Email) &&
+                    u.Username.Equals(
+                        username,
+                        StringComparison.OrdinalIgnoreCase) &&
+                    u.Email.Equals(
+                        email,
+                        StringComparison.OrdinalIgnoreCase)
             );
 
             if (user == null)
@@ -34,17 +67,25 @@ namespace BankingManagement.Business
                 return null;
             }
 
+            // Generate secure token
             byte[] tokenBytes = new byte[32];
 
-            using (var randomNumberGenerator = RandomNumberGenerator.Create())
+            using (var generator =
+                   RandomNumberGenerator.Create())
             {
-                randomNumberGenerator.GetBytes(tokenBytes);
+                generator.GetBytes(tokenBytes);
             }
 
-            string token = Convert.ToBase64String(tokenBytes);
+            string token =
+                BitConverter
+                    .ToString(tokenBytes)
+                    .Replace("-", "")
+                    .ToLowerInvariant();
 
             user.PasswordResetToken = token;
-            user.PasswordResetTokenExpiry = DateTime.Now.AddMinutes(30);
+
+            user.PasswordResetTokenExpiry =
+                DateTime.Now.AddMinutes(30);
 
             _repository.Update(user);
             _repository.Save();

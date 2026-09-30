@@ -13,10 +13,12 @@ namespace BankingManagement.Controllers
         private readonly CustomerBeneficiaryBusiness
             _beneficiaryBusiness;
 
+
         public CustomerBeneficiaryController()
         {
             BankingDbContext context =
                 new BankingDbContext();
+
 
             IGenericRepository<Customer>
                 customerRepository =
@@ -24,11 +26,13 @@ namespace BankingManagement.Controllers
                     context
                 );
 
+
             IGenericRepository<Beneficiary>
                 beneficiaryRepository =
                 new GenericRepository<Beneficiary>(
                     context
                 );
+
 
             IGenericRepository<BankBranch>
                 bankBranchRepository =
@@ -36,15 +40,28 @@ namespace BankingManagement.Controllers
                     context
                 );
 
+
+            IGenericRepository<Account>
+                accountRepository =
+                new GenericRepository<Account>(
+                    context
+                );
+
+
             _beneficiaryBusiness =
                 new CustomerBeneficiaryBusiness(
                     customerRepository,
                     beneficiaryRepository,
-                    bankBranchRepository
+                    bankBranchRepository,
+                    accountRepository
                 );
         }
 
-        // GET: CustomerBeneficiary
+
+        // =====================================================
+        // INDEX
+        // =====================================================
+
         public ActionResult Index()
         {
             if (Session["UserId"] == null)
@@ -55,8 +72,10 @@ namespace BankingManagement.Controllers
                 );
             }
 
+
             string role =
                 Session["Role"] as string;
+
 
             if (string.IsNullOrEmpty(role) ||
                 role.ToLower() != "customer")
@@ -64,18 +83,27 @@ namespace BankingManagement.Controllers
                 return new HttpStatusCodeResult(403);
             }
 
+
             int userId =
                 (int)Session["UserId"];
+
 
             var beneficiaries =
                 _beneficiaryBusiness.GetBeneficiaries(
                     userId
                 );
 
-            return View(beneficiaries);
+
+            return View(
+                beneficiaries
+            );
         }
 
-        // GET: CustomerBeneficiary/Create
+
+        // =====================================================
+        // CREATE - GET
+        // =====================================================
+
         public ActionResult Create()
         {
             if (Session["UserId"] == null)
@@ -86,8 +114,10 @@ namespace BankingManagement.Controllers
                 );
             }
 
+
             string role =
                 Session["Role"] as string;
+
 
             if (string.IsNullOrEmpty(role) ||
                 role.ToLower() != "customer")
@@ -95,13 +125,29 @@ namespace BankingManagement.Controllers
                 return new HttpStatusCodeResult(403);
             }
 
+
+            int userId =
+                (int)Session["UserId"];
+
+
             ViewBag.BankBranches =
                 _beneficiaryBusiness.GetBankBranches();
+
+
+            ViewBag.Accounts =
+                _beneficiaryBusiness.GetAvailableAccounts(
+                    userId
+                );
+
 
             return View();
         }
 
-        // POST: CustomerBeneficiary/Create
+
+        // =====================================================
+        // CREATE - POST
+        // =====================================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
@@ -115,8 +161,10 @@ namespace BankingManagement.Controllers
                 );
             }
 
+
             string role =
                 Session["Role"] as string;
+
 
             if (string.IsNullOrEmpty(role) ||
                 role.ToLower() != "customer")
@@ -124,16 +172,19 @@ namespace BankingManagement.Controllers
                 return new HttpStatusCodeResult(403);
             }
 
+
+            int userId =
+                (int)Session["UserId"];
+
+
             if (ModelState.IsValid)
             {
-                int userId =
-                    (int)Session["UserId"];
-
                 bool result =
                     _beneficiaryBusiness.AddBeneficiary(
                         userId,
                         beneficiaryDTO
                     );
+
 
                 if (result)
                 {
@@ -142,19 +193,36 @@ namespace BankingManagement.Controllers
                     );
                 }
 
+
                 ModelState.AddModelError(
                     "",
-                    "Unable to add beneficiary."
+                    "Unable to add beneficiary. Please select a valid active account."
                 );
             }
+
+
+            // Reload dropdowns after validation failure
 
             ViewBag.BankBranches =
                 _beneficiaryBusiness.GetBankBranches();
 
-            return View(beneficiaryDTO);
+
+            ViewBag.Accounts =
+                _beneficiaryBusiness.GetAvailableAccounts(
+                    userId
+                );
+
+
+            return View(
+                beneficiaryDTO
+            );
         }
 
-        // GET: CustomerBeneficiary/Delete
+
+        // =====================================================
+        // DELETE - GET
+        // =====================================================
+
         public ActionResult Delete(int id)
         {
             if (Session["UserId"] == null)
@@ -165,8 +233,10 @@ namespace BankingManagement.Controllers
                 );
             }
 
+
             string role =
                 Session["Role"] as string;
+
 
             if (string.IsNullOrEmpty(role) ||
                 role.ToLower() != "customer")
@@ -174,16 +244,20 @@ namespace BankingManagement.Controllers
                 return new HttpStatusCodeResult(403);
             }
 
+
             int userId =
                 (int)Session["UserId"];
+
 
             var beneficiaries =
                 _beneficiaryBusiness.GetBeneficiaries(
                     userId
                 );
 
+
             CustomerBeneficiaryDTO beneficiary =
                 null;
+
 
             foreach (var item in beneficiaries)
             {
@@ -194,18 +268,27 @@ namespace BankingManagement.Controllers
                 }
             }
 
+
             if (beneficiary == null)
             {
                 return HttpNotFound();
             }
 
-            return View(beneficiary);
+
+            return View(
+                beneficiary
+            );
         }
 
-        // POST: CustomerBeneficiary/Delete
+
+        // =====================================================
+        // DELETE - POST
+        // =====================================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(
+            int id)
         {
             if (Session["UserId"] == null)
             {
@@ -215,8 +298,10 @@ namespace BankingManagement.Controllers
                 );
             }
 
+
             string role =
                 Session["Role"] as string;
+
 
             if (string.IsNullOrEmpty(role) ||
                 role.ToLower() != "customer")
@@ -224,8 +309,10 @@ namespace BankingManagement.Controllers
                 return new HttpStatusCodeResult(403);
             }
 
+
             int userId =
                 (int)Session["UserId"];
+
 
             bool result =
                 _beneficiaryBusiness.DeleteBeneficiary(
@@ -233,10 +320,12 @@ namespace BankingManagement.Controllers
                     id
                 );
 
+
             if (!result)
             {
                 return HttpNotFound();
             }
+
 
             return RedirectToAction(
                 "Index"

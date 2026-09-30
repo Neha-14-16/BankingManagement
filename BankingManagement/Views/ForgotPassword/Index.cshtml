@@ -4,65 +4,388 @@
     ViewBag.Title = "Forgot Password";
 }
 
-<h2>Forgot Password</h2>
+<link rel="stylesheet"
+      href="@Url.Content("~/Content/ForgotPassword.css?v=3")" />
 
-<p>Enter your registered email address to reset your password.</p>
 
-@using (Html.BeginForm("Index", "ForgotPassword", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+<div class="forgot-password-page">
 
-    <div class="form-horizontal">
+    <div class="forgot-password-card">
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- =================================================
+             LEFT SECURITY PANEL
+             ================================================= -->
 
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Email,
-                new { @class = "control-label" }
-            )
+        <div class="forgot-security-panel">
 
-            @Html.TextBoxFor(
-                model => model.Email,
-                new
-                {
-                    @class = "form-control",
-                    type = "email"
-                }
-            )
+            <div class="forgot-security-icon">
+                🔐
+            </div>
 
-            @Html.ValidationMessageFor(
-                model => model.Email,
-                "",
-                new { @class = "text-danger" }
-            )
+            <div class="forgot-security-label">
+                ACCOUNT SECURITY
+            </div>
+
+            <h2>
+                Secure Password Recovery
+            </h2>
+
+            <p class="forgot-security-description">
+                Enter your username and registered email address
+                to identify your account securely.
+            </p>
+
+
+            <div class="forgot-security-points">
+
+                <div class="forgot-security-point">
+
+                    <div class="forgot-check">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>
+                            Account Verification
+                        </strong>
+
+                        <p>
+                            Your username and email are checked together
+                            before a reset link is created.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="forgot-security-point">
+
+                    <div class="forgot-check">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>
+                            Secure Reset Link
+                        </strong>
+
+                        <p>
+                            A unique reset token is generated for
+                            your specific account.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="forgot-security-point">
+
+                    <div class="forgot-check">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>
+                            Time Limited
+                        </strong>
+
+                        <p>
+                            The reset link remains valid only for
+                            a limited period.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="forgot-security-footer">
+
+                <span>
+                    🛡
+                </span>
+
+                <p>
+                    Never share your reset link with anyone.
+                </p>
+
+            </div>
+
         </div>
 
-        <br />
 
-        <button type="submit" class="btn btn-primary">
-            Send Reset Link
-        </button>
 
-        @Html.ActionLink(
-            "Back to Login",
-            "Index",
-            "Login",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <!-- =================================================
+             RIGHT FORM PANEL
+             ================================================= -->
+
+        <div class="forgot-form-panel">
+
+            <div class="forgot-form-header">
+
+                <div class="forgot-form-label">
+                    PASSWORD RECOVERY
+                </div>
+
+                <h1>
+                    Forgot Password?
+                </h1>
+
+                <p>
+                    Enter the username and email address associated
+                    with your account.
+                </p>
+
+            </div>
+
+
+            <!-- SUCCESS -->
+
+            @if (ViewBag.Message != null)
+            {
+                <div class="forgot-success-message">
+
+                    <div class="forgot-message-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Reset Link Sent
+                        </strong>
+
+                        <p>
+                            @ViewBag.Message
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- ERROR -->
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="forgot-error-message">
+
+                    <div class="forgot-message-icon">
+                        !
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Unable to continue
+                        </strong>
+
+                        @Html.ValidationSummary(
+                            true,
+                            "",
+                            new
+                            {
+                                @class =
+                                    "forgot-validation-summary"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- FORM -->
+
+            @using (Html.BeginForm(
+                "Index",
+                "ForgotPassword",
+                FormMethod.Post,
+                new
+                {
+                    @class =
+                        "forgot-password-form"
+                }
+            ))
+            {
+                @Html.AntiForgeryToken()
+
+
+                <!-- USERNAME -->
+
+                <div class="forgot-form-group">
+
+                    @Html.LabelFor(
+                        model => model.Username,
+                        "Username",
+                        new
+                        {
+                            @class =
+                                "forgot-form-label-text"
+                        }
+                    )
+
+                    <div class="forgot-input-wrapper">
+
+                        <span class="forgot-input-icon">
+                            👤
+                        </span>
+
+                        @Html.TextBoxFor(
+                            model => model.Username,
+                            new
+                            {
+                                @class =
+                                    "forgot-email-input",
+                                placeholder =
+                                    "Enter your username",
+                                autocomplete =
+                                    "username"
+                            }
+                        )
+
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.Username,
+                        "",
+                        new
+                        {
+                            @class =
+                                "forgot-field-error"
+                        }
+                    )
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="forgot-form-group">
+
+                    @Html.LabelFor(
+                        model => model.Email,
+                        "Registered Email Address",
+                        new
+                        {
+                            @class =
+                                "forgot-form-label-text"
+                        }
+                    )
+
+                    <div class="forgot-input-wrapper">
+
+                        <span class="forgot-input-icon">
+                            ✉
+                        </span>
+
+                        @Html.TextBoxFor(
+                            model => model.Email,
+                            new
+                            {
+                                @class =
+                                    "forgot-email-input",
+                                type = "email",
+                                placeholder =
+                                    "Enter your registered email",
+                                autocomplete =
+                                    "email"
+                            }
+                        )
+
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.Email,
+                        "",
+                        new
+                        {
+                            @class =
+                                "forgot-field-error"
+                        }
+                    )
+
+                </div>
+
+
+
+                <!-- BUTTON -->
+
+                <button type="submit"
+                        class="forgot-submit-button">
+
+                    <span>
+                        Send Reset Link
+                    </span>
+
+                    <span class="forgot-button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+                <!-- BACK -->
+
+                <div class="forgot-back-link">
+
+                    @Html.ActionLink(
+                        "← Back to Login",
+                        "Index",
+                        "Login"
+                    )
+
+                </div>
+
+            }
+
+
+            <div class="forgot-info-note">
+
+                <div class="forgot-info-icon">
+                    i
+                </div>
+
+                <div>
+
+                    <strong>
+                        How it works
+                    </strong>
+
+                    <p>
+                        Your username and email must belong to the
+                        same account. The reset link will then be
+                        sent to that email address.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="forgot-bottom-note">
+
+                <span>
+                    🔒
+                </span>
+
+                <p>
+                    Your email address can be shared by multiple
+                    accounts, but the username identifies your account.
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
-}
 
-@if (ViewBag.Message != null)
-{
-    <br />
+</div>
 
-    <div class="alert alert-success">
-        @ViewBag.Message
-    </div>
-}
 
 @section Scripts
 {

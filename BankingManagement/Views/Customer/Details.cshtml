@@ -4,92 +4,335 @@
     ViewBag.Title = "Customer Details";
 }
 
-<h2>Customer Details</h2>
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
 
-<div>
-    <hr />
+<div class="bank-page-header">
 
-    <dl class="dl-horizontal">
+    <div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </dt>
+        <p class="section-label">
+            CUSTOMER MANAGEMENT
+        </p>
 
-        <dd>
-            @Html.DisplayFor(model => model.CustomerId)
-        </dd>
+        <h2>
+            Customer Details
+        </h2>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
+        <p class="bank-page-subtitle">
+            View the complete registered profile of this customer.
+        </p>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-    </dl>
 </div>
 
-<p>
-    @Html.ActionLink(
-        "Edit",
-        "Edit",
-        new { id = Model.CustomerId },
-        new { @class = "btn btn-primary" }
-    )
 
-    @Html.ActionLink(
-        "Back to List",
-        "Index",
-        null,
-        new { @class = "btn btn-secondary" }
-    )
-</p>
+<div class="customer-details-layout">
+
+    <!-- =====================================================
+         CUSTOMER PROFILE CARD
+         ===================================================== -->
+
+    <div class="bank-card customer-profile-main">
+
+        <div class="customer-details-header">
+
+            <div class="large-customer-avatar">
+
+                @if (!string.IsNullOrEmpty(Model.FullName))
+                {
+                    @Model.FullName.Substring(0, 1).ToUpper()
+                }
+                else
+                {
+                    <span>?</span>
+                }
+
+            </div>
+
+            <div>
+
+                <h3>
+                    @Model.FullName
+                </h3>
+
+                <p>
+                    Registered Customer
+                </p>
+
+                <span class="status-active">
+                    Active Profile
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        <!-- =================================================
+             PERSONAL INFORMATION
+             ================================================= -->
+
+        <div class="details-section">
+
+            <p class="section-label">
+                PERSONAL INFORMATION
+            </p>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong>
+                        @Model.FullName
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Email Address
+                    </span>
+
+                    <strong>
+                        @Model.Email
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Phone Number
+                    </span>
+
+                    <strong>
+                        @Model.PhoneNumber
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Date of Birth
+                    </span>
+
+                    <strong>
+                        @Model.DateOfBirth.ToString("dd MMMM yyyy")
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item detail-item-full">
+
+                    <span>
+                        Address
+                    </span>
+
+                    <strong>
+                        @Model.Address
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        <!-- =================================================
+             SYSTEM INFORMATION
+             ================================================= -->
+
+        <div class="details-section">
+
+            <p class="section-label">
+                SYSTEM INFORMATION
+            </p>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+
+                    <span>
+                        Customer ID
+                    </span>
+
+                    <strong>
+                        @Model.CustomerId
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        User ID
+                    </span>
+
+                    <strong>
+                        @Model.UserId
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Registration Date
+                    </span>
+
+                    <strong>
+                        @Model.CreatedDate.ToString("dd MMMM yyyy")
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Customer Role
+                    </span>
+
+                    <strong>
+                        Customer
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="customer-details-actions">
+
+            @Html.ActionLink(
+                "Edit Customer",
+                "Edit",
+                new { id = Model.CustomerId },
+                new { @class = "btn btn-primary" }
+            )
+
+            @Html.ActionLink(
+                "Back to Customers",
+                "Index",
+                "Customer",
+                null,
+                new { @class = "btn btn-secondary" }
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIDE INFORMATION
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Customer Summary
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Customer ID
+            </span>
+
+            <strong>
+                @Model.CustomerId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Profile Type
+            </span>
+
+            <strong>
+                Customer
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Access
+            </span>
+
+            <strong class="processing-text">
+                Customer Login
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Registration
+            </span>
+
+            <strong>
+                Administrator Controlled
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Administrator Note
+            </strong>
+
+            <p>
+                Review customer information carefully before making any profile changes.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

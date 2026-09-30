@@ -2,43 +2,355 @@
 
 @{
     ViewBag.Title = "User Details";
+
+    bool isActive = Model.IsActive;
+
+    bool isAdmin =
+        !string.IsNullOrEmpty(Model.Role) &&
+        Model.Role.ToLower() == "admin";
 }
 
-<h2>User Details</h2>
+<div class="bank-page-header">
 
-<div>
-    <dl class="dl-horizontal">
+    <div>
 
-        <dt>User ID</dt>
-        <dd>@Model.UserId</dd>
+        <p class="section-label">
+            USER MANAGEMENT
+        </p>
 
-        <dt>Username</dt>
-        <dd>@Model.Username</dd>
+        <h2>
+            User Details
+        </h2>
 
-        <dt>Role</dt>
-        <dd>@Model.Role</dd>
+        <p class="bank-page-subtitle">
+            View the user's login, role and account access information.
+        </p>
 
-        <dt>Active</dt>
-        <dd>@Model.IsActive</dd>
+    </div>
 
-        <dt>Created Date</dt>
-        <dd>@Model.CreatedDate</dd>
+    <div>
 
-    </dl>
+        @if (isActive)
+        {
+            <span class="status-active">
+                ✓ Active User
+            </span>
+        }
+        else
+        {
+            <span class="status-inactive">
+                Inactive User
+            </span>
+        }
+
+    </div>
+
 </div>
 
-<p>
-    @Html.ActionLink(
-        "Edit",
-        "Edit",
-        new { id = Model.UserId },
-        new { @class = "btn btn-primary" }
-    )
 
-    @Html.ActionLink(
-        "Back to List",
-        "Index",
-        null,
-        new { @class = "btn btn-secondary" }
-    )
-</p>
+<div class="user-details-layout">
+
+    <!-- =====================================================
+         MAIN USER PROFILE
+         ===================================================== -->
+
+    <div class="bank-card user-profile-main">
+
+        <div class="user-details-header">
+
+            <div class="large-user-avatar">
+
+                @if (!string.IsNullOrEmpty(Model.Username))
+                {
+                    @Model.Username.Substring(0, 1).ToUpper()
+                }
+                else
+                {
+                    <span>?</span>
+                }
+
+            </div>
+
+            <div>
+
+                <h3>
+                    @Model.Username
+                </h3>
+
+                <p>
+                    Application User
+                </p>
+
+                @if (isAdmin)
+                {
+                    <span class="role-admin-badge">
+                        Administrator
+                    </span>
+                }
+                else
+                {
+                    <span class="role-customer-badge">
+                        Customer
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        <!-- =================================================
+             USER INFORMATION
+             ================================================= -->
+
+        <div class="details-section">
+
+            <p class="section-label">
+                USER INFORMATION
+            </p>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+
+                    <span>
+                        User ID
+                    </span>
+
+                    <strong>
+                        @Model.UserId
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Username
+                    </span>
+
+                    <strong>
+                        @Model.Username
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item detail-item-full">
+
+                    <span>
+                        Email Address
+                    </span>
+
+                    <strong>
+                        @Model.Email
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        <!-- =================================================
+             ACCESS INFORMATION
+             ================================================= -->
+
+        <div class="details-section">
+
+            <p class="section-label">
+                ACCESS INFORMATION
+            </p>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+
+                    <span>
+                        Role
+                    </span>
+
+                    <strong>
+                        @Model.Role
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Account Status
+                    </span>
+
+                    @if (isActive)
+                    {
+                        <strong class="transaction-success-text">
+                            Active
+                        </strong>
+                    }
+                    else
+                    {
+                        <strong class="transaction-failed-text">
+                            Inactive
+                        </strong>
+                    }
+
+                </div>
+
+
+                <div class="detail-item detail-item-full">
+
+                    <span>
+                        Created Date
+                    </span>
+
+                    <strong>
+                        @Model.CreatedDate.ToString(
+                            "dd MMMM yyyy, hh:mm tt"
+                        )
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="customer-details-actions">
+
+            @Html.ActionLink(
+                "Edit User",
+                "Edit",
+                new { id = Model.UserId },
+                new { @class = "btn btn-primary" }
+            )
+
+            @Html.ActionLink(
+                "Back to Users",
+                "Index",
+                "User",
+                null,
+                new { @class = "btn btn-secondary" }
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIDE SUMMARY
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            User Summary
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                User ID
+            </span>
+
+            <strong>
+                #@Model.UserId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Username
+            </span>
+
+            <strong>
+                @Model.Username
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Role
+            </span>
+
+            <strong>
+                @Model.Role
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Status
+            </span>
+
+            @if (isActive)
+            {
+                <strong class="processing-text">
+                    Active
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    Inactive
+                </strong>
+            }
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Access Control
+            </span>
+
+            <strong>
+                Role Based
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Administrator Note
+            </strong>
+
+            <p>
+                User access is controlled by the assigned role and active status.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

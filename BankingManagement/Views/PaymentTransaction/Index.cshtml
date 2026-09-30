@@ -1,88 +1,370 @@
-﻿@model IEnumerable<BankingManagement.Models.PaymentTransaction>
+﻿@using System.Linq
+@model IEnumerable<BankingManagement.Models.PaymentTransaction>
 
 @{
-    ViewBag.Title = "Payment Transactions";
+    ViewBag.Title = "Payment Management";
+
+    int totalPayments =
+        Model == null ? 0 : Model.Count();
+
+    int successfulPayments =
+        Model == null
+            ? 0
+            : Model.Count(
+                p => !string.IsNullOrEmpty(p.Status) &&
+                     p.Status.ToLower() == "success"
+            );
+
+    decimal totalPaymentValue =
+        Model == null
+            ? 0
+            : Model.Sum(p => p.Amount);
 }
 
-<h2>Payment Transactions</h2>
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
 
-<hr />
+<div class="admin-page-header">
+
+    <div>
+
+        <p class="section-label">
+            PAYMENT MANAGEMENT
+        </p>
+
+        <h2>
+            Payment Transactions
+        </h2>
+
+        <p class="bank-page-subtitle">
+            Monitor Razorpay payment records and payment status.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUMMARY CARDS
+     ===================================================== -->
+
+<div class="row dashboard-summary">
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL PAYMENTS
+            </div>
+
+            <div class="bank-card-value">
+                @totalPayments
+            </div>
+
+            <div class="bank-card-subtitle">
+                Payment records in the system
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                SUCCESSFUL PAYMENTS
+            </div>
+
+            <div class="bank-card-value">
+                @successfulPayments
+            </div>
+
+            <div class="bank-card-subtitle">
+                Successfully completed payments
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL PAYMENT VALUE
+            </div>
+
+            <div class="bank-card-value">
+                ₹ @totalPaymentValue.ToString("N2")
+            </div>
+
+            <div class="bank-card-subtitle">
+                Combined payment amount
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PAYMENT RECORDS
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            PAYMENT HISTORY
+        </p>
+
+        <h3>
+            Payment Records
+        </h3>
+
+    </div>
+
+</div>
+
 
 @if (Model == null || !Model.Any())
 {
-    <p>No payment transactions found.</p>
+    <div class="bank-card empty-state">
+
+        <div class="empty-icon">
+            ₹
+        </div>
+
+        <h4>
+            No Payment Transactions
+        </h4>
+
+        <p>
+            There are currently no payment records available.
+        </p>
+
+    </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
+    <div class="bank-card admin-table-card">
 
-        <tr>
-            <th>Payment ID</th>
-            <th>Account ID</th>
-            <th>Amount</th>
-            <th>Payment Type</th>
-            <th>Payment Date</th>
-            <th>Status</th>
-            <th>Reference Number</th>
-            <th>Actions</th>
-        </tr>
+        <div class="table-responsive">
 
-        @foreach (var payment in Model)
-        {
-            <tr>
+            <table class="table banking-table admin-payment-table">
 
-                <td>
-                    @payment.PaymentId
-                </td>
+                <thead>
 
-                <td>
-                    @payment.AccountId
-                </td>
+                    <tr>
 
-                <td>
-                    ₹ @payment.Amount
-                </td>
+                        <th>
+                            Payment
+                        </th>
 
-                <td>
-                    @payment.PaymentType
-                </td>
+                        <th>
+                            Account
+                        </th>
 
-                <td>
-                    @payment.PaymentDate
-                </td>
+                        <th>
+                            Amount
+                        </th>
 
-                <td>
-                    @payment.Status
-                </td>
+                        <th>
+                            Payment Method
+                        </th>
 
-                <td>
-                    @payment.ReferenceNumber
-                </td>
+                        <th>
+                            Date
+                        </th>
 
-                <td>
+                        <th>
+                            Status
+                        </th>
 
-                    @Html.ActionLink(
-                        "Details",
-                        "Details",
-                        "PaymentTransaction",
-                        new { id = payment.PaymentId },
-                        new { @class = "btn btn-info btn-sm" }
-                    )
+                        <th>
+                            Reference
+                        </th>
 
-                </td>
+                        <th>
+                            Action
+                        </th>
 
-            </tr>
-        }
+                    </tr>
 
-    </table>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var payment in Model)
+                    {
+                        <tr>
+
+                            <!-- PAYMENT -->
+
+                            <td>
+
+                                <div class="admin-payment-name">
+
+                                    <div class="admin-payment-icon">
+                                        ₹
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            PAY #@payment.PaymentId
+                                        </strong>
+
+                                        <span>
+                                            Razorpay Payment
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- ACCOUNT -->
+
+                            <td>
+
+                                <span class="account-number-text">
+                                    Account #@payment.AccountId
+                                </span>
+
+                            </td>
+
+
+                            <!-- AMOUNT -->
+
+                            <td>
+
+                                <strong class="transaction-amount-text">
+                                    ₹ @payment.Amount.ToString("N2")
+                                </strong>
+
+                            </td>
+
+
+                            <!-- PAYMENT METHOD -->
+
+                            <td>
+
+                                <span class="payment-method-badge">
+                                    @payment.PaymentType
+                                </span>
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                @payment.PaymentDate.ToString(
+                                    "dd MMM yyyy"
+                                )
+
+                                <small class="transaction-time">
+                                    @payment.PaymentDate.ToString(
+                                        "hh:mm tt"
+                                    )
+                                </small>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(payment.Status) &&
+                                    payment.Status.ToLower() == "success")
+                                {
+                                    <span class="status-success">
+                                        Success
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-failed">
+                                        @payment.Status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- REFERENCE -->
+
+                            <td>
+
+                                <span class="reference-text">
+                                    @payment.ReferenceNumber
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                @Html.ActionLink(
+                                    "Details",
+                                    "Details",
+                                    "PaymentTransaction",
+                                    new
+                                    {
+                                        id = payment.PaymentId
+                                    },
+                                    new
+                                    {
+                                        @class =
+                                            "btn btn-sm btn-outline-info"
+                                    }
+                                )
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 }
 
-<hr />
 
-@Html.ActionLink(
-    "Back to Administrator Dashboard",
-    "Index",
-    "AdminDashboard",
-    null,
-    new { @class = "btn btn-primary" }
-)
+<!-- =====================================================
+     BACK
+     ===================================================== -->
+
+<div class="admin-page-footer">
+
+    @Html.ActionLink(
+        "← Back to Administrator Dashboard",
+        "Index",
+        "AdminDashboard",
+        null,
+        new { @class = "btn btn-secondary" }
+    )
+
+</div>

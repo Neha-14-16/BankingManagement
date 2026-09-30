@@ -4,144 +4,319 @@
     ViewBag.Title = "Deposit / Withdrawal";
 }
 
-<h2>Deposit / Withdrawal</h2>
+<div class="bank-page-header">
 
-<hr />
+    <div>
+        <p class="section-label">ACCOUNT SERVICES</p>
 
-@using (Html.BeginForm(
-    "Create",
-    "CustomerAccountTransaction",
-    FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+        <h2>Deposit / Withdrawal</h2>
 
-    <div class="form-horizontal">
+        <p class="bank-page-subtitle">
+            Add funds to your account or withdraw money securely.
+        </p>
+    </div>
 
-        @Html.ValidationSummary(
-            true,
-            "",
-            new { @class = "text-danger" }
-        )
+    <div class="secure-badge">
+        🔒 Secure Transaction
+    </div>
 
-        <div class="form-group">
+</div>
 
-            @Html.LabelFor(
-                model => model.AccountId,
-                "Account",
-                new { @class = "control-label" }
-            )
+<div class="transfer-layout">
 
-            @Html.DropDownListFor(
-                model => model.AccountId,
-                new SelectList(
-                    ViewBag.Accounts,
-                    "AccountId",
-                    "AccountNumber"
-                ),
-                "-- Select Your Account --",
-                new { @class = "form-control" }
-            )
+    <!-- =====================================================
+         TRANSACTION FORM
+         ===================================================== -->
 
-            @Html.ValidationMessageFor(
-                model => model.AccountId,
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                ₹
+            </div>
+
+            <div>
+
+                <h3>Account Transaction</h3>
+
+                <p>
+                    Select your account and choose the transaction type.
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        @using (Html.BeginForm(
+            "Create",
+            "CustomerAccountTransaction",
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
                 "",
                 new { @class = "text-danger" }
             )
 
-        </div>
+            <!-- ACCOUNT -->
 
-        <br />
+            <div class="bank-form-group">
 
-        <div class="form-group">
+                @Html.LabelFor(
+                    model => model.AccountId,
+                    "Account"
+                )
 
-            @Html.LabelFor(
-                model => model.TransactionType,
-                "Transaction Type",
-                new { @class = "control-label" }
-            )
-
-            @Html.DropDownListFor(
-                model => model.TransactionType,
-                new SelectList(
-                    new[]
+                @Html.DropDownListFor(
+                    model => model.AccountId,
+                    new SelectList(
+                        ViewBag.Accounts,
+                        "AccountId",
+                        "AccountNumber"
+                    ),
+                    "-- Select Your Account --",
+                    new
                     {
-                        new
+                        @class = "form-control"
+                    }
+                )
+
+                <small class="form-help">
+                    Select the bank account for this transaction.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.AccountId,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- TRANSACTION TYPE -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.TransactionType,
+                    "Transaction Type"
+                )
+
+                @Html.DropDownListFor(
+                    model => model.TransactionType,
+                    new SelectList(
+                        new[]
                         {
-                            Value = "Deposit",
-                            Text = "Deposit"
+                            new
+                            {
+                                Value = "Deposit",
+                                Text = "Deposit"
+                            },
+
+                            new
+                            {
+                                Value = "Withdrawal",
+                                Text = "Withdrawal"
+                            }
                         },
+                        "Value",
+                        "Text"
+                    ),
+                    "-- Select Transaction Type --",
+                    new
+                    {
+                        @class = "form-control"
+                    }
+                )
+
+                <small class="form-help">
+                    Choose whether you want to deposit or withdraw funds.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.TransactionType,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- AMOUNT -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Amount,
+                    "Amount"
+                )
+
+                <div class="amount-input-wrapper">
+
+                    <span class="currency-symbol">
+                        ₹
+                    </span>
+
+                    @Html.TextBoxFor(
+                        model => model.Amount,
                         new
                         {
-                            Value = "Withdrawal",
-                            Text = "Withdrawal"
+                            @class = "form-control amount-input",
+                            type = "number",
+                            min = "0.01",
+                            step = "0.01",
+                            placeholder = "0.00"
                         }
-                    },
-                    "Value",
-                    "Text"
-                ),
-                "-- Select Transaction Type --",
-                new { @class = "form-control" }
-            )
+                    )
 
-            @Html.ValidationMessageFor(
-                model => model.TransactionType,
-                "",
-                new { @class = "text-danger" }
-            )
+                </div>
 
-        </div>
+                <small class="form-help">
+                    Enter the amount for this transaction.
+                </small>
 
-        <br />
+                @Html.ValidationMessageFor(
+                    model => model.Amount,
+                    "",
+                    new { @class = "text-danger" }
+                )
 
-        <div class="form-group">
+            </div>
 
-            @Html.LabelFor(
-                model => model.Amount,
-                "Amount",
-                new { @class = "control-label" }
-            )
 
-            @Html.TextBoxFor(
-                model => model.Amount,
-                new
-                {
-                    @class = "form-control",
-                    type = "number",
-                    min = "0.01",
-                    step = "0.01",
-                    placeholder = "Enter amount"
-                }
-            )
+            <!-- SECURITY MESSAGE -->
 
-            @Html.ValidationMessageFor(
-                model => model.Amount,
-                "",
-                new { @class = "text-danger" }
-            )
+            <div class="transaction-security-note">
 
-        </div>
+                <span class="security-icon">
+                    ✓
+                </span>
 
-        <br />
+                <div>
 
-        <button type="submit"
-                class="btn btn-primary">
+                    <strong>
+                        Secure Account Transaction
+                    </strong>
 
-            Process Transaction
+                    <p>
+                        Transactions are processed only for your own active account.
+                    </p>
 
-        </button>
+                </div>
 
-        <span style="margin-left:10px;"></span>
+            </div>
 
-        @Html.ActionLink(
-            "Back to Dashboard",
-            "Index",
-            "CustomerDashboard",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+
+            <!-- BUTTONS -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Process Transaction
+
+                </button>
+
+                @Html.ActionLink(
+                    "Back to Dashboard",
+                    "Index",
+                    "CustomerDashboard",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+        }
 
     </div>
-}
+
+
+    <!-- =====================================================
+         INFORMATION CARD
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>Transaction Information</h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Deposit
+            </span>
+
+            <strong>
+                Add money to your account
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Withdrawal
+            </span>
+
+            <strong>
+                Withdraw money from your account
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account Status
+            </span>
+
+            <strong class="processing-text">
+                Active Account Required
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Transaction Status
+            </span>
+
+            <strong class="processing-text">
+                Instant
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                Withdrawal transactions require sufficient account balance.
+                Make sure the selected account has enough funds.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
 
 @section Scripts
 {

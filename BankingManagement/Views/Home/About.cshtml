@@ -1,9 +1,309 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <p>Use this area to provide additional information.</p>
+<main class="about-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <section class="about-hero">
+
+        <div class="about-hero-icon">
+            🏦
+        </div>
+
+        <div>
+
+            <span class="home-badge">
+                ABOUT THE PLATFORM
+            </span>
+
+            <h1>
+                Banking Management
+            </h1>
+
+            <p>
+                A structured banking application designed to
+                manage customers, accounts, transactions and
+                payment operations through one platform.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SYSTEM OVERVIEW
+         ===================================================== -->
+
+    <section class="about-content">
+
+        <div class="about-main-card">
+
+            <span class="section-label">
+                SYSTEM OVERVIEW
+            </span>
+
+            <h2>
+                About This Application
+            </h2>
+
+            <p>
+                Banking Management is a web-based application
+                that provides a centralized platform for
+                managing essential banking operations.
+            </p>
+
+            <p>
+                The application supports customer management,
+                bank account management, beneficiary management,
+                fund transfers, deposits, withdrawals and
+                payment transaction records.
+            </p>
+
+            <p>
+                The system also includes authentication,
+                role-based access control and password recovery
+                functionality to organize secure access to
+                different areas of the application.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             PLATFORM HIGHLIGHTS
+             ================================================= -->
+
+        <div class="about-side-card">
+
+            <span class="section-label">
+                PLATFORM HIGHLIGHTS
+            </span>
+
+            <div class="about-highlight">
+
+                <span class="about-highlight-icon">
+                    👥
+                </span>
+
+                <div>
+
+                    <strong>
+                        Customer Management
+                    </strong>
+
+                    <p>
+                        Manage customer profiles and information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="about-highlight">
+
+                <span class="about-highlight-icon">
+                    💳
+                </span>
+
+                <div>
+
+                    <strong>
+                        Account Management
+                    </strong>
+
+                    <p>
+                        Maintain account details and balances.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="about-highlight">
+
+                <span class="about-highlight-icon">
+                    ⇄
+                </span>
+
+                <div>
+
+                    <strong>
+                        Banking Transactions
+                    </strong>
+
+                    <p>
+                        Process transfers, deposits and withdrawals.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="about-highlight">
+
+                <span class="about-highlight-icon">
+                    🔐
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure Access
+                    </strong>
+
+                    <p>
+                        Role-based access and password recovery.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TECHNOLOGY SECTION
+         ===================================================== -->
+
+    <section class="about-technology">
+
+        <div class="about-section-heading">
+
+            <span class="section-label">
+                TECHNOLOGY
+            </span>
+
+            <h2>
+                Application Architecture
+            </h2>
+
+            <p>
+                The application follows a layered structure
+                to keep the different responsibilities organized.
+            </p>
+
+        </div>
+
+
+        <div class="about-tech-grid">
+
+            <div class="about-tech-card">
+
+                <div class="about-tech-number">
+                    01
+                </div>
+
+                <h3>
+                    Presentation Layer
+                </h3>
+
+                <p>
+                    MVC Controllers and Razor Views handle
+                    user interaction and application screens.
+                </p>
+
+            </div>
+
+
+            <div class="about-tech-card">
+
+                <div class="about-tech-number">
+                    02
+                </div>
+
+                <h3>
+                    Business Layer
+                </h3>
+
+                <p>
+                    Business classes contain validation and
+                    application-specific banking operations.
+                </p>
+
+            </div>
+
+
+            <div class="about-tech-card">
+
+                <div class="about-tech-number">
+                    03
+                </div>
+
+                <h3>
+                    Repository Layer
+                </h3>
+
+                <p>
+                    Generic repository classes handle common
+                    database operations through reusable methods.
+                </p>
+
+            </div>
+
+
+            <div class="about-tech-card">
+
+                <div class="about-tech-number">
+                    04
+                </div>
+
+                <h3>
+                    Data Layer
+                </h3>
+
+                <p>
+                    Entity Framework and the database context
+                    connect the application with SQL Server.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         SECURITY
+         ===================================================== -->
+
+    <section class="about-security">
+
+        <div class="about-security-icon">
+            🛡️
+        </div>
+
+        <div>
+
+            <span class="section-label">
+                SECURITY & ACCESS
+            </span>
+
+            <h2>
+                Role-Based Banking Access
+            </h2>
+
+            <p>
+                Different application areas are controlled
+                according to the user's role and session.
+                Administrative operations are restricted to
+                authorized users, while customers can access
+                their own banking services and transactions.
+            </p>
+
+        </div>
+
+    </section>
+
 </main>

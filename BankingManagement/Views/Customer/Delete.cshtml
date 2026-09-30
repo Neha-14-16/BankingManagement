@@ -4,87 +4,360 @@
     ViewBag.Title = "Delete Customer";
 }
 
-<h2>Delete Customer</h2>
+<div class="delete-page">
 
-<h3>Are you sure you want to delete this customer?</h3>
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
 
-<div>
-    <hr />
+    <div class="bank-page-header">
 
-    <dl class="dl-horizontal">
+        <div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </dt>
+            <p class="section-label">
+                CUSTOMER MANAGEMENT
+            </p>
 
-        <dd>
-            @Html.DisplayFor(model => model.CustomerId)
-        </dd>
+            <h2>
+                Delete Customer
+            </h2>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
+            <p class="bank-page-subtitle">
+                Review the customer information before confirming deletion.
+            </p>
 
-        <dd>
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+        <div class="secure-badge">
+            🔒 Admin Only
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
+    <!-- =====================================================
+         ERROR MESSAGE
+         ===================================================== -->
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm(
-        "DeleteConfirmed",
-        "Customer",
-        FormMethod.Post))
+    @if (ViewBag.DeleteError != null)
     {
-        @Html.AntiForgeryToken()
+        <div class="delete-error-alert">
 
-        @Html.Hidden(
-            "id",
-            Model.CustomerId
-        )
+            <div class="delete-error-icon">
+                !
+            </div>
 
-        <button type="submit" class="btn btn-danger">
-            Delete
-        </button>
+            <div>
 
-        @Html.ActionLink(
-            "Cancel",
-            "Index",
-            "Customer",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+                <strong>
+                    Customer Cannot Be Deleted
+                </strong>
+
+                <p>
+                    @ViewBag.DeleteError
+                </p>
+
+            </div>
+
+        </div>
     }
+
+
+    <!-- =====================================================
+         CUSTOMER DETAILS
+         ===================================================== -->
+
+    <div class="delete-customer-layout">
+
+        <div class="bank-card delete-customer-card">
+
+            <!-- CUSTOMER HEADER -->
+
+            <div class="delete-customer-header">
+
+                <div class="large-customer-avatar">
+
+                    @if (!string.IsNullOrEmpty(Model.FullName))
+                    {
+                        @Model.FullName.Substring(0, 1).ToUpper()
+                    }
+                    else
+                    {
+                        <span>?</span>
+                    }
+
+                </div>
+
+                <div>
+
+                    <span class="section-label">
+                        CUSTOMER
+                    </span>
+
+                    <h3>
+                        @Model.FullName
+                    </h3>
+
+                    <p>
+                        Customer ID: @Model.CustomerId
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <hr />
+
+
+            <!-- =================================================
+                 CUSTOMER INFORMATION
+                 ================================================= -->
+
+            <div class="details-section">
+
+                <p class="section-label">
+                    CUSTOMER INFORMATION
+                </p>
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+
+                        <span>
+                            Customer ID
+                        </span>
+
+                        <strong>
+                            @Model.CustomerId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Full Name
+                        </span>
+
+                        <strong>
+                            @Model.FullName
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item detail-item-full">
+
+                        <span>
+                            Email Address
+                        </span>
+
+                        <strong>
+                            @Model.Email
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Phone Number
+                        </span>
+
+                        <strong>
+                            @Model.PhoneNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Date of Birth
+                        </span>
+
+                        <strong>
+                            @Model.DateOfBirth.ToString("dd MMMM yyyy")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item detail-item-full">
+
+                        <span>
+                            Address
+                        </span>
+
+                        <strong>
+                            @Model.Address
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DELETE FORM
+                 ================================================= -->
+
+            @using (Html.BeginForm(
+                "DeleteConfirmed",
+                "Customer",
+                FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <!-- IMPORTANT:
+                     Controller expects parameter named "id" -->
+
+                @Html.Hidden(
+                    "id",
+                    Model.CustomerId
+                )
+
+
+                <!-- WARNING -->
+
+                <div class="delete-warning-box">
+
+                    <div class="delete-warning-icon">
+                        ⚠
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Important
+                        </strong>
+
+                        <p>
+                            Deleting a customer may be prevented when
+                            related banking records such as accounts
+                            are still associated with the customer.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="customer-details-actions">
+
+                    <button type="submit"
+                            class="btn btn-danger delete-confirm-btn"
+                            onclick="return confirm('Are you sure you want to delete this customer?');">
+
+                        Delete Customer
+
+                    </button>
+
+
+                    @Html.ActionLink(
+                        "Cancel",
+                        "Index",
+                        "Customer",
+                        null,
+                        new { @class = "btn btn-secondary" }
+                    )
+
+                </div>
+
+            }
+
+        </div>
+
+
+        <!-- =====================================================
+             SIDE INFORMATION
+             ===================================================== -->
+
+        <div class="transfer-info-card">
+
+            <h4>
+                Deletion Information
+            </h4>
+
+            <div class="transfer-info-divider"></div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Customer ID
+                </span>
+
+                <strong>
+                    #@Model.CustomerId
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Customer
+                </span>
+
+                <strong>
+                    @Model.FullName
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Access
+                </span>
+
+                <strong>
+                    Administrator
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Action
+                </span>
+
+                <strong>
+                    Delete Record
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-tip">
+
+                <strong>
+                    💡 Banking Record Protection
+                </strong>
+
+                <p>
+                    A customer with linked banking records cannot
+                    be removed while those related records still
+                    exist.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

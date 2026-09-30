@@ -2,62 +2,333 @@
 
 @{
     ViewBag.Title = "Transaction Details";
+
+    bool isSuccess =
+        !string.IsNullOrEmpty(Model.Status) &&
+        Model.Status.ToLower() == "success";
+
+    bool isDeposit =
+        !string.IsNullOrEmpty(Model.TransactionType) &&
+        Model.TransactionType.ToLower() == "deposit";
 }
 
-<h2>Transaction Details</h2>
+<div class="bank-page-header">
 
-<hr />
+    <div>
 
-<table class="table table-bordered">
+        <p class="section-label">
+            ACCOUNT TRANSACTIONS
+        </p>
 
-    <tr>
-        <th>Account Number</th>
-        <td>@Model.AccountNumber</td>
-    </tr>
+        <h2>
+            Transaction Details
+        </h2>
 
-    <tr>
-        <th>Transaction Type</th>
-        <td>@Model.TransactionType</td>
-    </tr>
+        <p class="bank-page-subtitle">
+            View the complete details of this account transaction.
+        </p>
 
-    <tr>
-        <th>Amount</th>
-        <td>₹ @Model.Amount</td>
-    </tr>
+    </div>
 
-    <tr>
-        <th>Transaction Date</th>
-        <td>@Model.TransactionDate</td>
-    </tr>
+    <div>
 
-    <tr>
-        <th>Status</th>
-        <td>@Model.Status</td>
-    </tr>
+        @if (isSuccess)
+        {
+            <span class="status-success">
+                ✓ Successful Transaction
+            </span>
+        }
+        else
+        {
+            <span class="status-failed">
+                @Model.Status
+            </span>
+        }
 
-    <tr>
-        <th>Reference Number</th>
-        <td>@Model.ReferenceNumber</td>
-    </tr>
+    </div>
 
-</table>
+</div>
 
-<br />
 
-@Html.ActionLink(
-    "Back to Transactions",
-    "Index",
-    "AccountTransaction",
-    null,
-    new { @class = "btn btn-secondary" }
-)
+<div class="transaction-details-layout">
 
-<span style="margin-left:10px;"></span>
+    <!-- =====================================================
+         MAIN TRANSACTION CARD
+         ===================================================== -->
 
-@Html.ActionLink(
-    "Delete",
-    "Delete",
-    "AccountTransaction",
-    new { id = Model.AccountTransactionId },
-    new { @class = "btn btn-danger" }
-)
+    <div class="bank-card transaction-receipt-card">
+
+        <div class="transaction-receipt-header">
+
+            <div class="transaction-receipt-icon">
+                @if (isDeposit)
+                {
+                    <span>↓</span>
+                }
+                else
+                {
+                    <span>↑</span>
+                }
+            </div>
+
+            <div>
+
+                <p class="section-label">
+                    TRANSACTION
+                </p>
+
+                <h3>
+                    @Model.TransactionType
+                </h3>
+
+                <p>
+                    Account Transaction #@Model.AccountTransactionId
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="transaction-main-amount">
+
+            <span>
+                Transaction Amount
+            </span>
+
+            <strong>
+                ₹ @Model.Amount.ToString("N2")
+            </strong>
+
+        </div>
+
+
+        <hr />
+
+
+        <!-- =================================================
+             TRANSACTION INFORMATION
+             ================================================= -->
+
+        <div class="details-section">
+
+            <p class="section-label">
+                TRANSACTION INFORMATION
+            </p>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+
+                    <span>
+                        Account Number
+                    </span>
+
+                    <strong>
+                        @Model.AccountNumber
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Transaction Type
+                    </span>
+
+                    <strong>
+                        @Model.TransactionType
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Transaction Date
+                    </span>
+
+                    <strong>
+                        @Model.TransactionDate.ToString(
+                            "dd MMMM yyyy"
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Transaction Time
+                    </span>
+
+                    <strong>
+                        @Model.TransactionDate.ToString(
+                            "hh:mm tt"
+                        )
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Status
+                    </span>
+
+                    @if (isSuccess)
+                    {
+                        <strong class="transaction-success-text">
+                            Success
+                        </strong>
+                    }
+                    else
+                    {
+                        <strong class="transaction-failed-text">
+                            @Model.Status
+                        </strong>
+                    }
+
+                </div>
+
+
+                <div class="detail-item">
+
+                    <span>
+                        Reference Number
+                    </span>
+
+                    <strong>
+                        @Model.ReferenceNumber
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="customer-details-actions">
+
+            @Html.ActionLink(
+                "Back to Transactions",
+                "Index",
+                "AccountTransaction",
+                null,
+                new { @class = "btn btn-secondary" }
+            )
+
+            @Html.ActionLink(
+                "Delete Transaction",
+                "Delete",
+                "AccountTransaction",
+                new
+                {
+                    id = Model.AccountTransactionId
+                },
+                new { @class = "btn btn-danger" }
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIDE SUMMARY
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Transaction Summary
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Transaction ID
+            </span>
+
+            <strong>
+                #@Model.AccountTransactionId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account
+            </span>
+
+            <strong>
+                @Model.AccountNumber
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Transaction Type
+            </span>
+
+            <strong>
+                @Model.TransactionType
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Status
+            </span>
+
+            @if (isSuccess)
+            {
+                <strong class="processing-text">
+                    Success
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    @Model.Status
+                </strong>
+            }
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Transaction Information
+            </strong>
+
+            <p>
+                This transaction record contains the account activity captured by the banking system.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

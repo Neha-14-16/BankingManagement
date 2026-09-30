@@ -4,120 +4,342 @@
     ViewBag.Title = "Create Transfer";
 }
 
-<h2>Create Transfer</h2>
+<div class="bank-page-header">
 
-@using (Html.BeginForm("Create", "BankingTransaction", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+    <div>
 
-    <div class="form-horizontal">
+        <p class="section-label">
+            TRANSACTION MANAGEMENT
+        </p>
 
-        @Html.ValidationSummary(
-            true,
-            "",
-            new { @class = "text-danger" }
-        )
+        <h2>
+            Create Transfer
+        </h2>
 
-        <div class="form-group">
-
-            @Html.LabelFor(
-                model => model.FromAccountId,
-                "From Account",
-                new { @class = "control-label" }
-            )
-
-            @Html.DropDownListFor(
-                model => model.FromAccountId,
-                new SelectList(
-                    ViewBag.Accounts,
-                    "AccountId",
-                    "AccountNumber"
-                ),
-                "-- Select Source Account --",
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.FromAccountId,
-                "",
-                new { @class = "text-danger" }
-            )
-
-        </div>
-
-        <br />
-
-        <div class="form-group">
-
-            @Html.LabelFor(
-                model => model.ToAccountId,
-                "To Account",
-                new { @class = "control-label" }
-            )
-
-            @Html.DropDownListFor(
-                model => model.ToAccountId,
-                new SelectList(
-                    ViewBag.Accounts,
-                    "AccountId",
-                    "AccountNumber"
-                ),
-                "-- Select Destination Account --",
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.ToAccountId,
-                "",
-                new { @class = "text-danger" }
-            )
-
-        </div>
-
-        <br />
-
-        <div class="form-group">
-
-            @Html.LabelFor(
-                model => model.Amount,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.Amount,
-                new
-                {
-                    @class = "form-control",
-                    type = "number",
-                    min = "0.01",
-                    step = "0.01"
-                }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Amount,
-                "",
-                new { @class = "text-danger" }
-            )
-
-        </div>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary">
-            Transfer Money
-        </button>
-
-        @Html.ActionLink(
-            "Back to Transactions",
-            "Index",
-            "BankingTransaction",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <p class="bank-page-subtitle">
+            Transfer funds securely between customer bank accounts.
+        </p>
 
     </div>
-}
+
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
+
+</div>
+
+
+<div class="transfer-layout">
+
+    <!-- =====================================================
+         TRANSFER FORM
+         ===================================================== -->
+
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                ⇄
+            </div>
+
+            <div>
+
+                <h3>
+                    Transfer Details
+                </h3>
+
+                <p>
+                    Select the source account, destination account and amount.
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        @using (Html.BeginForm(
+            "Create",
+            "BankingTransaction",
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" }
+            )
+
+
+            <!-- =================================================
+                 FROM ACCOUNT
+                 ================================================= -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.FromAccountId,
+                    "From Account"
+                )
+
+                @Html.DropDownListFor(
+                    model => model.FromAccountId,
+                    new SelectList(
+                        ViewBag.Accounts,
+                        "AccountId",
+                        "AccountNumber"
+                    ),
+                    "-- Select Source Account --",
+                    new
+                    {
+                        @class = "form-control"
+                    }
+                )
+
+                <small class="form-help">
+                    Select the account from which the money will be transferred.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.FromAccountId,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 TO ACCOUNT
+                 ================================================= -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.ToAccountId,
+                    "To Account"
+                )
+
+                @Html.DropDownListFor(
+                    model => model.ToAccountId,
+                    new SelectList(
+                        ViewBag.Accounts,
+                        "AccountId",
+                        "AccountNumber"
+                    ),
+                    "-- Select Destination Account --",
+                    new
+                    {
+                        @class = "form-control"
+                    }
+                )
+
+                <small class="form-help">
+                    Select the account that will receive the funds.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.ToAccountId,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 AMOUNT
+                 ================================================= -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Amount,
+                    "Transfer Amount"
+                )
+
+                <div class="amount-input-wrapper">
+
+                    <span class="currency-symbol">
+                        ₹
+                    </span>
+
+                    @Html.TextBoxFor(
+                        model => model.Amount,
+                        new
+                        {
+                            @class = "form-control amount-input",
+                            type = "number",
+                            min = "0.01",
+                            step = "0.01",
+                            placeholder = "0.00"
+                        }
+                    )
+
+                </div>
+
+                <small class="form-help">
+                    Enter the amount to transfer.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Amount,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 SECURITY
+                 ================================================= -->
+
+            <div class="transaction-security-note">
+
+                <span class="security-icon">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure Banking Transfer
+                    </strong>
+
+                    <p>
+                        The system validates both accounts, account status and available balance before processing the transfer.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Transfer Money
+
+                </button>
+
+                @Html.ActionLink(
+                    "Back to Transactions",
+                    "Index",
+                    "BankingTransaction",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION CARD
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Transfer Information
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Transfer Type
+            </span>
+
+            <strong>
+                Account to Account
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Source
+            </span>
+
+            <strong>
+                Selected Bank Account
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Destination
+            </span>
+
+            <strong>
+                Selected Bank Account
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Validation
+            </span>
+
+            <strong class="processing-text">
+                Balance Checked
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Processing
+            </span>
+
+            <strong class="processing-text">
+                Instant
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                Make sure the source and destination accounts are correct before processing the transfer.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @section Scripts
 {

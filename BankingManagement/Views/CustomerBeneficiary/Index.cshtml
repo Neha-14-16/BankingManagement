@@ -1,77 +1,255 @@
-﻿@model IEnumerable<BankingManagement.DTOs.CustomerBeneficiaryDTO>
+﻿@using System.Linq
+@model IEnumerable<BankingManagement.DTOs.CustomerBeneficiaryDTO>
 
 @{
     ViewBag.Title = "My Beneficiaries";
 }
 
-<h2>My Beneficiaries</h2>
+<div class="bank-page-header">
 
-<hr />
+    <div>
 
-<p>
+        <p class="section-label">
+            PAYMENTS
+        </p>
+
+        <h2>
+            My Beneficiaries
+        </h2>
+
+        <p class="bank-page-subtitle">
+            Manage the accounts you have saved for secure money transfers.
+        </p>
+
+    </div>
+
+    <div class="secure-badge">
+        🔒 Secure
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ADD BENEFICIARY
+     ===================================================== -->
+
+<div class="beneficiary-top-actions">
+
     @Html.ActionLink(
-        "Add Beneficiary",
+        "＋ Add Beneficiary",
         "Create",
         "CustomerBeneficiary",
         null,
         new { @class = "btn btn-primary" }
     )
-</p>
+
+</div>
+
+
+<!-- =====================================================
+     BENEFICIARY LIST
+     ===================================================== -->
 
 @if (Model == null || !Model.Any())
 {
-    <p>No beneficiaries found.</p>
+    <div class="bank-card empty-state beneficiary-empty">
+
+        <div class="empty-icon">
+            +
+        </div>
+
+        <h4>
+            No Beneficiaries Yet
+        </h4>
+
+        <p>
+            Add a beneficiary to make future transfers faster and easier.
+        </p>
+
+        @Html.ActionLink(
+            "Add Beneficiary",
+            "Create",
+            "CustomerBeneficiary",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
-
-        <tr>
-            <th>Beneficiary Name</th>
-            <th>Account Number</th>
-            <th>IFSC Code</th>
-            <th>Bank Name</th>
-            <th>Actions</th>
-        </tr>
+    <div class="beneficiary-grid">
 
         @foreach (var beneficiary in Model)
         {
-            <tr>
-                <td>
-                    @beneficiary.BeneficiaryName
-                </td>
+            <div class="beneficiary-card">
 
-                <td>
-                    @beneficiary.AccountNumber
-                </td>
+                <!-- =================================================
+                     BENEFICIARY HEADER
+                     ================================================= -->
 
-                <td>
-                    @beneficiary.IFSCCode
-                </td>
+                <div class="beneficiary-card-header">
 
-                <td>
-                    @beneficiary.BankName
-                </td>
+                    <div class="beneficiary-avatar">
 
-                <td>
-                    @Html.ActionLink(
-                        "Delete",
-                        "Delete",
+                        @if (!string.IsNullOrEmpty(beneficiary.BeneficiaryName))
+                        {
+                            @beneficiary.BeneficiaryName.Substring(0, 1).ToUpper()
+                        }
+                        else
+                        {
+                            <span>?</span>
+                        }
+
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            @beneficiary.BeneficiaryName
+                        </h4>
+
+                        <span class="beneficiary-label">
+                            Saved Beneficiary
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     BENEFICIARY DETAILS
+                     ================================================= -->
+
+                <div class="beneficiary-card-details">
+
+                    <div class="beneficiary-detail">
+
+                        <span>
+                            Account Number
+                        </span>
+
+                        <strong>
+                            @beneficiary.AccountNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="beneficiary-detail">
+
+                        <span>
+                            IFSC Code
+                        </span>
+
+                        <strong>
+                            @beneficiary.IFSCCode
+                        </strong>
+
+                    </div>
+
+
+                    <div class="beneficiary-detail">
+
+                        <span>
+                            Bank
+                        </span>
+
+                        <strong>
+                            @beneficiary.BankName
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FOOTER
+                     ================================================= -->
+
+                <div class="beneficiary-card-footer">
+
+                    <span class="beneficiary-status">
+                        ✓ Verified Details
+                    </span>
+
+
+                    <!-- DELETE -->
+
+                    @using (Html.BeginForm(
+                        "DeleteConfirmed",
                         "CustomerBeneficiary",
-                        new { id = beneficiary.BeneficiaryId },
-                        new { @class = "btn btn-danger btn-sm" }
-                    )
-                </td>
-            </tr>
+                        FormMethod.Post,
+                        new
+                        {
+                            @class = "beneficiary-delete-form"
+                        }
+                    ))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.Hidden(
+                            "id",
+                            beneficiary.BeneficiaryId
+                        )
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to delete this beneficiary?');">
+
+                            Delete
+
+                        </button>
+                    }
+
+                </div>
+
+            </div>
         }
 
-    </table>
+    </div>
 }
+
+
+<!-- =====================================================
+     INFORMATION
+     ===================================================== -->
+
+<div class="bank-card beneficiary-info-box">
+
+    <div class="beneficiary-info-icon">
+        i
+    </div>
+
+    <div>
+
+        <strong>
+            About Beneficiaries
+        </strong>
+
+        <p>
+            Beneficiaries are saved accounts that you can use when
+            transferring money. Always verify the account number and
+            IFSC code before making a transfer.
+        </p>
+
+    </div>
+
+</div>
+
 
 <br />
 
+
+<!-- =====================================================
+     BACK TO DASHBOARD
+     ===================================================== -->
+
 @Html.ActionLink(
-    "Back to Dashboard",
+    "← Back to Dashboard",
     "Index",
     "CustomerDashboard",
     null,

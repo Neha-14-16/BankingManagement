@@ -4,85 +4,304 @@
     ViewBag.Title = "Account Details";
 }
 
-<h2>Account Details</h2>
+<div class="bank-page-header">
 
-<div>
-    <hr />
+    <div>
 
-    <dl class="dl-horizontal">
+        <p class="section-label">
+            ACCOUNT MANAGEMENT
+        </p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountId)
-        </dt>
+        <h2>
+            Account Details
+        </h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.AccountId)
-        </dd>
+        <p class="bank-page-subtitle">
+            View the complete details of this customer bank account.
+        </p>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </dt>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.CustomerId)
-        </dd>
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccountNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccountType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Balance)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-    </dl>
 </div>
 
-<p>
-    @Html.ActionLink(
-        "Edit",
-        "Edit",
-        new { id = Model.AccountId },
-        new { @class = "btn btn-primary" }
-    )
 
-    @Html.ActionLink(
-        "Back to Accounts",
-        "Index",
-        "Account",
-        null,
-        new { @class = "btn btn-secondary" }
-    )
-</p>
+<div class="account-details-layout">
+
+    <!-- =====================================================
+         ACCOUNT CARD
+         ===================================================== -->
+
+    <div class="account-details-main">
+
+        <div class="account-card account-details-card">
+
+            <div class="account-label">
+                @Model.AccountType Account
+            </div>
+
+            <div class="account-number">
+                @Model.AccountNumber
+            </div>
+
+            <div class="account-balance">
+                ₹ @Model.Balance.ToString("N2")
+            </div>
+
+            <div class="account-footer">
+
+                <span>
+                    Current Balance
+                </span>
+
+                @if (!string.IsNullOrEmpty(Model.Status) &&
+                    Model.Status.ToLower() == "active")
+                {
+                    <span class="status-active">
+                        Active
+                    </span>
+                }
+                else
+                {
+                    <span class="status-inactive">
+                        @Model.Status
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACCOUNT INFORMATION
+             ================================================= -->
+
+        <div class="bank-card account-information-card">
+
+            <div class="details-section">
+
+                <p class="section-label">
+                    ACCOUNT INFORMATION
+                </p>
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+
+                        <span>
+                            Account ID
+                        </span>
+
+                        <strong>
+                            @Model.AccountId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Customer ID
+                        </span>
+
+                        <strong>
+                            @Model.CustomerId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Account Number
+                        </span>
+
+                        <strong>
+                            @Model.AccountNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Account Type
+                        </span>
+
+                        <strong>
+                            @Model.AccountType
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Account Balance
+                        </span>
+
+                        <strong>
+                            ₹ @Model.Balance.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+                            @Model.Status
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item detail-item-full">
+
+                        <span>
+                            Account Created
+                        </span>
+
+                        <strong>
+                            @Model.CreatedDate.ToString(
+                                "dd MMMM yyyy, hh:mm tt"
+                            )
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <div class="customer-details-actions">
+
+                @Html.ActionLink(
+                    "Edit Account",
+                    "Edit",
+                    new { id = Model.AccountId },
+                    new { @class = "btn btn-primary" }
+                )
+
+                @Html.ActionLink(
+                    "Back to Accounts",
+                    "Index",
+                    "Account",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SIDE INFORMATION
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Account Summary
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account Number
+            </span>
+
+            <strong>
+                @Model.AccountNumber
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account Type
+            </span>
+
+            <strong>
+                @Model.AccountType
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Customer ID
+            </span>
+
+            <strong>
+                @Model.CustomerId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Status
+            </span>
+
+            @if (!string.IsNullOrEmpty(Model.Status) &&
+                Model.Status.ToLower() == "active")
+            {
+                <strong class="processing-text">
+                    Active
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    @Model.Status
+                </strong>
+            }
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Account Information
+            </strong>
+
+            <p>
+                Review the account balance and status before making any changes.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

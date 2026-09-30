@@ -2,64 +2,381 @@
 
 @{
     ViewBag.Title = "Payment Details";
+
+    bool isSuccess =
+        Model != null &&
+        !string.IsNullOrEmpty(Model.Status) &&
+        Model.Status.ToLower() == "success";
 }
 
-<h2>Payment Details</h2>
+<div class="bank-page-header">
 
-<hr />
+    <div>
+
+        <p class="section-label">
+            PAYMENT MANAGEMENT
+        </p>
+
+        <h2>
+            Payment Details
+        </h2>
+
+        <p class="bank-page-subtitle">
+            View the complete details of this Razorpay payment transaction.
+        </p>
+
+    </div>
+
+    <div>
+
+        @if (Model != null)
+        {
+            if (isSuccess)
+            {
+                <span class="status-success">
+                    ✓ Successful Payment
+                </span>
+            }
+            else
+            {
+                <span class="status-failed">
+                    @Model.Status
+                </span>
+            }
+        }
+
+    </div>
+
+</div>
+
 
 @if (Model == null)
 {
-    <p>Payment transaction not found.</p>
+    <div class="bank-card empty-state">
+
+        <div class="empty-icon">
+            ₹
+        </div>
+
+        <h4>
+            Payment Not Found
+        </h4>
+
+        <p>
+            The requested payment transaction could not be found.
+        </p>
+
+        @Html.ActionLink(
+            "Back to Payment Transactions",
+            "Index",
+            "PaymentTransaction",
+            null,
+            new { @class = "btn btn-secondary" }
+        )
+
+    </div>
 }
 else
 {
-    <table class="table table-bordered">
+    <div class="transaction-details-layout">
 
-        <tr>
-            <th>Payment ID</th>
-            <td>@Model.PaymentId</td>
-        </tr>
+        <!-- =================================================
+             MAIN PAYMENT CARD
+             ================================================= -->
 
-        <tr>
-            <th>Account ID</th>
-            <td>@Model.AccountId</td>
-        </tr>
+        <div class="bank-card transaction-receipt-card">
 
-        <tr>
-            <th>Amount</th>
-            <td>₹ @Model.Amount</td>
-        </tr>
+            <div class="transaction-receipt-header">
 
-        <tr>
-            <th>Payment Type</th>
-            <td>@Model.PaymentType</td>
-        </tr>
+                <div class="transaction-receipt-icon">
+                    ₹
+                </div>
 
-        <tr>
-            <th>Payment Date</th>
-            <td>@Model.PaymentDate</td>
-        </tr>
+                <div>
 
-        <tr>
-            <th>Status</th>
-            <td>@Model.Status</td>
-        </tr>
+                    <p class="section-label">
+                        RAZORPAY PAYMENT
+                    </p>
 
-        <tr>
-            <th>Reference Number</th>
-            <td>@Model.ReferenceNumber</td>
-        </tr>
+                    <h3>
+                        Payment #@Model.PaymentId
+                    </h3>
 
-    </table>
+                    <p>
+                        Payment transaction record
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT AMOUNT -->
+
+            <div class="transaction-main-amount">
+
+                <span>
+                    Payment Amount
+                </span>
+
+                <strong>
+                    ₹ @Model.Amount.ToString("N2")
+                </strong>
+
+            </div>
+
+
+            <hr />
+
+
+            <!-- PAYMENT INFORMATION -->
+
+            <div class="details-section">
+
+                <p class="section-label">
+                    PAYMENT INFORMATION
+                </p>
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+
+                        <span>
+                            Payment ID
+                        </span>
+
+                        <strong>
+                            @Model.PaymentId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Account ID
+                        </span>
+
+                        <strong>
+                            @Model.AccountId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Payment Type
+                        </span>
+
+                        <strong>
+                            @Model.PaymentType
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Payment Amount
+                        </span>
+
+                        <strong>
+                            ₹ @Model.Amount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Payment Date
+                        </span>
+
+                        <strong>
+                            @Model.PaymentDate.ToString(
+                                "dd MMMM yyyy"
+                            )
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Payment Time
+                        </span>
+
+                        <strong>
+                            @Model.PaymentDate.ToString(
+                                "hh:mm tt"
+                            )
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Status
+                        </span>
+
+                        @if (isSuccess)
+                        {
+                            <strong class="transaction-success-text">
+                                Success
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong class="transaction-failed-text">
+                                @Model.Status
+                            </strong>
+                        }
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Payment Reference
+                        </span>
+
+                        <strong>
+                            @Model.ReferenceNumber
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="customer-details-actions">
+
+                @Html.ActionLink(
+                    "Back to Payment Transactions",
+                    "Index",
+                    "PaymentTransaction",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SIDE SUMMARY
+             ================================================= -->
+
+        <div class="transfer-info-card">
+
+            <h4>
+                Payment Summary
+            </h4>
+
+            <div class="transfer-info-divider"></div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Payment ID
+                </span>
+
+                <strong>
+                    #@Model.PaymentId
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Payment Method
+                </span>
+
+                <strong>
+                    @Model.PaymentType
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Amount
+                </span>
+
+                <strong>
+                    ₹ @Model.Amount.ToString("N2")
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Status
+                </span>
+
+                @if (isSuccess)
+                {
+                    <strong class="processing-text">
+                        Success
+                    </strong>
+                }
+                else
+                {
+                    <strong>
+                        @Model.Status
+                    </strong>
+                }
+
+            </div>
+
+
+            <div class="transfer-info-item">
+
+                <span>
+                    Reference
+                </span>
+
+                <strong>
+                    @Model.ReferenceNumber
+                </strong>
+
+            </div>
+
+
+            <div class="transfer-tip">
+
+                <strong>
+                    💡 Payment Information
+                </strong>
+
+                <p>
+                    This page displays the payment record stored by the banking application after the payment flow.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 }
-
-<br />
-
-@Html.ActionLink(
-    "Back to Payment Transactions",
-    "Index",
-    "PaymentTransaction",
-    null,
-    new { @class = "btn btn-primary" }
-)

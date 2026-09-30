@@ -4,81 +4,393 @@
     ViewBag.Title = "Edit User";
 }
 
-<h2>Edit User</h2>
+<div class="bank-page-header">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+    <div>
 
-    @Html.HiddenFor(model => model.UserId)
+        <p class="section-label">
+            USER MANAGEMENT
+        </p>
 
-    <div class="form-horizontal">
+        <h2>
+            Edit User
+        </h2>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Username, new { @class = "control-label" })
-            @Html.TextBoxFor(
-                model => model.Username,
-                new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.Username)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, new { @class = "control-label" })
-            @Html.TextBoxFor(
-                model => model.Email,
-                new { @class = "form-control", type = "email" }
-            )
-            @Html.ValidationMessageFor(model => model.Email)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PasswordHash, new { @class = "control-label" })
-            @Html.PasswordFor(
-                model => model.PasswordHash,
-                new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.PasswordHash)
-            <small>Leave blank if you do not want to change the password.</small>
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role, new { @class = "control-label" })
-            @Html.TextBoxFor(
-                model => model.Role,
-                new { @class = "form-control" }
-            )
-            @Html.ValidationMessageFor(model => model.Role)
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
-            @Html.CheckBoxFor(model => model.IsActive)
-        </div>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary">
-            Save Changes
-        </button>
-
-        @Html.ActionLink(
-            "Back to List",
-            "Index",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <p class="bank-page-subtitle">
+            Update the user's login, role and account access details.
+        </p>
 
     </div>
-}
+
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
+
+</div>
+
+
+<div class="transfer-layout">
+
+    <!-- =====================================================
+         EDIT USER FORM
+         ===================================================== -->
+
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                ✎
+            </div>
+
+            <div>
+
+                <h3>
+                    User Information
+                </h3>
+
+                <p>
+                    Update the information that needs to be changed.
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(
+                model => model.UserId
+            )
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" }
+            )
+
+
+            <!-- USERNAME -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Username,
+                    "Username"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Username,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter username"
+                    }
+                )
+
+                <small class="form-help">
+                    Update the username used for login.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Username,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Email,
+                    "Email Address"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Email,
+                    new
+                    {
+                        @class = "form-control",
+                        type = "email",
+                        placeholder = "example@email.com"
+                    }
+                )
+
+                <small class="form-help">
+                    Update the user's registered email address.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Email,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.PasswordHash,
+                    "Password"
+                )
+
+                @Html.PasswordFor(
+                    model => model.PasswordHash,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter new password"
+                    }
+                )
+
+                <small class="form-help">
+                    Leave this field blank if you do not want to change the password.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.PasswordHash,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- ROLE -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Role,
+                    "User Role"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Role,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Admin or Customer"
+                    }
+                )
+
+                <small class="form-help">
+                    The role controls the user's access to the application.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Role,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="bank-form-group">
+
+                <label>
+                    Account Status
+                </label>
+
+                <div class="user-status-toggle">
+
+                    @Html.CheckBoxFor(
+                        model => model.IsActive,
+                        new
+                        {
+                            @class = "user-active-checkbox"
+                        }
+                    )
+
+                    <div>
+
+                        <strong>
+                            Active User
+                        </strong>
+
+                        <small>
+                            Allow the user to access the application.
+                        </small>
+
+                    </div>
+
+                </div>
+
+                @Html.ValidationMessageFor(
+                    model => model.IsActive,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="transaction-security-note">
+
+                <span class="security-icon">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure User Update
+                    </strong>
+
+                    <p>
+                        Review the user's role and active status carefully before saving changes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Save Changes
+
+                </button>
+
+                @Html.ActionLink(
+                    "Back to Users",
+                    "Index",
+                    "User",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         USER SUMMARY
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            User Summary
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                User ID
+            </span>
+
+            <strong>
+                @Model.UserId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Username
+            </span>
+
+            <strong>
+                @Model.Username
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Current Role
+            </span>
+
+            <strong>
+                @Model.Role
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Current Status
+            </span>
+
+            @if (Model.IsActive)
+            {
+                <strong class="processing-text">
+                    Active
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    Inactive
+                </strong>
+            }
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account Created
+            </span>
+
+            <strong>
+                @Model.CreatedDate.ToString("dd MMM yyyy")
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                Leaving the password field blank keeps the existing password unchanged.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @section Scripts
 {

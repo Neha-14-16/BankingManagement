@@ -4,113 +4,357 @@
     ViewBag.Title = "Edit Account";
 }
 
-<h2>Edit Account</h2>
+<div class="bank-page-header">
 
-@using (Html.BeginForm("Edit", "Account", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+    <div>
 
-    @Html.HiddenFor(model => model.AccountId)
-    @Html.HiddenFor(model => model.CustomerId)
+        <p class="section-label">
+            ACCOUNT MANAGEMENT
+        </p>
 
-    <div class="form-horizontal">
+        <h2>
+            Edit Account
+        </h2>
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.AccountNumber,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.AccountNumber,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.AccountNumber,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.AccountType,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.AccountType,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.AccountType,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Balance,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.Balance,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Balance,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Status,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.Status,
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.Status,
-                "",
-                new { @class = "text-danger" }
-            )
-        </div>
-
-        <br />
-
-        <button type="submit" class="btn btn-primary">
-            Save Changes
-        </button>
-
-        @Html.ActionLink(
-            "Back to Accounts",
-            "Index",
-            "Account",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <p class="bank-page-subtitle">
+            Update the selected customer's bank account information.
+        </p>
 
     </div>
-}
+
+    <div class="secure-badge">
+        🔒 Administrator
+    </div>
+
+</div>
+
+
+<div class="transfer-layout">
+
+    <!-- =====================================================
+         EDIT ACCOUNT FORM
+         ===================================================== -->
+
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                ✎
+            </div>
+
+            <div>
+
+                <h3>
+                    Account Details
+                </h3>
+
+                <p>
+                    Update the account information below.
+                </p>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        @using (Html.BeginForm(
+            "Edit",
+            "Account",
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(
+                model => model.AccountId
+            )
+
+            @Html.HiddenFor(
+                model => model.CustomerId
+            )
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" }
+            )
+
+
+            <!-- ACCOUNT NUMBER -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.AccountNumber,
+                    "Account Number"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.AccountNumber,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter account number"
+                    }
+                )
+
+                <small class="form-help">
+                    Verify the customer's account number before saving.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.AccountNumber,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- ACCOUNT TYPE -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.AccountType,
+                    "Account Type"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.AccountType,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Savings or Current"
+                    }
+                )
+
+                <small class="form-help">
+                    Enter the account type.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.AccountType,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- BALANCE -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Balance,
+                    "Account Balance"
+                )
+
+                <div class="amount-input-wrapper">
+
+                    <span class="currency-symbol">
+                        ₹
+                    </span>
+
+                    @Html.TextBoxFor(
+                        model => model.Balance,
+                        new
+                        {
+                            @class = "form-control amount-input",
+                            type = "number",
+                            min = "0",
+                            step = "0.01",
+                            placeholder = "0.00"
+                        }
+                    )
+
+                </div>
+
+                <small class="form-help">
+                    Update the current account balance.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Balance,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.Status,
+                    "Account Status"
+                )
+
+                @Html.TextBoxFor(
+                    model => model.Status,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Active or Inactive"
+                    }
+                )
+
+                <small class="form-help">
+                    Update the account status as required.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.Status,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="transaction-security-note">
+
+                <span class="security-icon">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong>
+                        Secure Account Update
+                    </strong>
+
+                    <p>
+                        Verify the account information before saving changes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Save Changes
+
+                </button>
+
+                @Html.ActionLink(
+                    "Back to Accounts",
+                    "Index",
+                    "Account",
+                    null,
+                    new { @class = "btn btn-secondary" }
+                )
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCOUNT INFORMATION
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Account Summary
+        </h4>
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account ID
+            </span>
+
+            <strong>
+                @Model.AccountId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Customer ID
+            </span>
+
+            <strong>
+                @Model.CustomerId
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account Number
+            </span>
+
+            <strong>
+                @Model.AccountNumber
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Current Status
+            </span>
+
+            @if (!string.IsNullOrEmpty(Model.Status) &&
+                Model.Status.ToLower() == "active")
+            {
+                <strong class="processing-text">
+                    Active
+                </strong>
+            }
+            else
+            {
+                <strong>
+                    @Model.Status
+                </strong>
+            }
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                Account ID and Customer ID are maintained by the system and cannot be changed from this form.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @section Scripts
 {

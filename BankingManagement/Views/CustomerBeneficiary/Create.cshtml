@@ -4,225 +4,503 @@
     ViewBag.Title = "Add Beneficiary";
 }
 
-<h2>Add Beneficiary</h2>
+<div class="bank-page-header">
 
-<hr />
+    <div>
 
-@using (Html.BeginForm(
-    "Create",
-    "CustomerBeneficiary",
-    FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+        <p class="section-label">
+            PAYMENTS
+        </p>
 
-    <div class="form-horizontal">
-
-        @Html.ValidationSummary(
-            true,
-            "",
-            new { @class = "text-danger" }
-        )
-
-        <div class="form-group">
-
-            @Html.LabelFor(
-                model => model.BeneficiaryName,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.BeneficiaryName,
-                new
-                {
-                    @class = "form-control",
-                    placeholder = "Enter beneficiary name"
-                }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.BeneficiaryName,
-                "",
-                new { @class = "text-danger" }
-            )
-
-        </div>
-
-        <br />
-
-        <div class="form-group">
-
-            @Html.LabelFor(
-                model => model.AccountNumber,
-                new { @class = "control-label" }
-            )
-
-            @Html.TextBoxFor(
-                model => model.AccountNumber,
-                new
-                {
-                    @class = "form-control",
-                    placeholder = "Enter account number"
-                }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.AccountNumber,
-                "",
-                new { @class = "text-danger" }
-            )
-
-        </div>
-
-        <br />
-
-        <div class="form-group">
-
-            <label class="control-label">
-                Bank
-            </label>
-
-            @Html.DropDownList(
-                "BankBranchId",
-                new SelectList(
-                    ViewBag.BankBranches,
-                    "BankBranchId",
-                    "BankName"
-                ),
-                "-- Select Bank --",
-                new { @class = "form-control" }
-            )
-
-            @Html.ValidationMessageFor(
-                model => model.BankBranchId,
-                "",
-                new { @class = "text-danger" }
-            )
-
-        </div>
-
-        <br />
-
-        <div class="form-group">
-
-            <label class="control-label">
-                Branch
-            </label>
-
-            <select id="BranchDropdown"
-                    class="form-control">
-
-                <option value="">
-                    -- Select Branch --
-                </option>
-
-                @foreach (var branch in ViewBag.BankBranches)
-                {
-                    <option value="@branch.BankBranchId"
-                            data-bank="@branch.BankName"
-                            data-ifsc="@branch.IFSCCode">
-
-                        @branch.BranchName
-
-                    </option>
-                }
-
-            </select>
-
-        </div>
-
-        <br />
-
-        <div class="form-group">
-
-            <label class="control-label">
-                IFSC Code
-            </label>
-
-            <input type="text"
-                   id="IFSCCode"
-                   class="form-control"
-                   readonly />
-
-        </div>
-
-        <br />
-
-        <button type="submit"
-                class="btn btn-primary">
-
+        <h2>
             Add Beneficiary
+        </h2>
 
-        </button>
-
-        &nbsp;
-
-        @Html.ActionLink(
-            "Back to Beneficiaries",
-            "Index",
-            "CustomerBeneficiary",
-            null,
-            new { @class = "btn btn-secondary" }
-        )
+        <p class="bank-page-subtitle">
+            Add a trusted bank account for quick and secure transfers.
+        </p>
 
     </div>
-}
+
+    <div class="secure-badge">
+        🔒 Secure
+    </div>
+
+</div>
+
+
+<div class="transfer-layout">
+
+
+    <!-- =====================================================
+         BENEFICIARY FORM
+         ===================================================== -->
+
+    <div class="bank-form-card">
+
+        <div class="bank-form-header">
+
+            <div class="bank-form-icon">
+                +
+            </div>
+
+            <div>
+
+                <h3>
+                    Beneficiary Details
+                </h3>
+
+                <p>
+                    Select an existing bank account and enter the
+                    beneficiary details.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        @using (Html.BeginForm(
+            "Create",
+            "CustomerBeneficiary",
+            FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new
+                {
+                    @class = "text-danger"
+                }
+            )
+
+
+            <!-- =================================================
+                 BENEFICIARY NAME
+                 ================================================= -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.BeneficiaryName,
+                    "Beneficiary Name"
+                )
+
+
+                @Html.TextBoxFor(
+                    model => model.BeneficiaryName,
+                    new
+                    {
+                        @class = "form-control",
+                        placeholder = "Enter beneficiary name"
+                    }
+                )
+
+
+                <small class="form-help">
+                    Enter the name you want to use for this saved beneficiary.
+                </small>
+
+
+                @Html.ValidationMessageFor(
+                    model => model.BeneficiaryName,
+                    "",
+                    new
+                    {
+                        @class = "text-danger"
+                    }
+                )
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BENEFICIARY ACCOUNT NUMBER
+                 ================================================= -->
+
+            <div class="bank-form-group">
+
+                @Html.LabelFor(
+                    model => model.AccountNumber,
+                    "Beneficiary Account Number"
+                )
+
+
+                <select name="AccountNumber"
+                        id="AccountNumber"
+                        class="form-control"
+                        required>
+
+                    <option value="">
+                        -- Select Account Number --
+                    </option>
+
+
+                    @if (ViewBag.Accounts != null)
+                    {
+                        foreach (var account in ViewBag.Accounts)
+                        {
+                            if (Model != null &&
+                                Model.AccountNumber == account.AccountNumber)
+                            {
+                                <option value="@account.AccountNumber"
+                                        selected="selected">
+
+                                    @account.AccountNumber -
+                                    @account.AccountType
+
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@account.AccountNumber">
+
+                                    @account.AccountNumber -
+                                    @account.AccountType
+
+                                </option>
+                            }
+                        }
+                    }
+
+                </select>
+
+
+                <small class="form-help">
+                    Select the existing bank account you want to save as a beneficiary.
+                </small>
+
+
+                @Html.ValidationMessageFor(
+                    model => model.AccountNumber,
+                    "",
+                    new
+                    {
+                        @class = "text-danger"
+                    }
+                )
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BANK + BRANCH
+                 ================================================= -->
+
+            <div class="beneficiary-form-row">
+
+
+                <!-- =================================================
+                     BANK
+                     ================================================= -->
+
+                <div class="bank-form-group">
+
+                    <label>
+                        Bank
+                    </label>
+
+
+                    @Html.DropDownList(
+                        "BankBranchId",
+                        new SelectList(
+                            ViewBag.BankBranches,
+                            "BankBranchId",
+                            "BankName"
+                        ),
+                        "-- Select Bank --",
+                        new
+                        {
+                            @class = "form-control",
+                            id = "BankBranchId"
+                        }
+                    )
+
+
+                    <small class="form-help">
+                        Select the beneficiary's bank.
+                    </small>
+
+
+                    @Html.ValidationMessageFor(
+                        model => model.BankBranchId,
+                        "",
+                        new
+                        {
+                            @class = "text-danger"
+                        }
+                    )
+
+                </div>
+
+
+
+                <!-- =================================================
+                     BRANCH
+                     ================================================= -->
+
+                <div class="bank-form-group">
+
+                    <label>
+                        Branch
+                    </label>
+
+
+                    <select id="BranchDropdown"
+                            class="form-control">
+
+                        <option value="">
+                            -- Select Branch --
+                        </option>
+
+
+                        @if (ViewBag.BankBranches != null)
+                        {
+                            foreach (var branch in ViewBag.BankBranches)
+                            {
+                                if (Model != null &&
+                                    Model.BankBranchId == branch.BankBranchId)
+                                {
+                                    <option value="@branch.BankBranchId"
+                                            data-bank="@branch.BankName"
+                                            data-ifsc="@branch.IFSCCode"
+                                            selected="selected">
+
+                                        @branch.BranchName
+
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@branch.BankBranchId"
+                                            data-bank="@branch.BankName"
+                                            data-ifsc="@branch.IFSCCode">
+
+                                        @branch.BranchName
+
+                                    </option>
+                                }
+                            }
+                        }
+
+                    </select>
+
+
+                    <small class="form-help">
+                        Select the branch associated with the bank.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 IFSC CODE
+                 ================================================= -->
+
+            <div class="bank-form-group">
+
+                <label>
+                    IFSC Code
+                </label>
+
+
+                <div class="ifsc-display">
+
+                    <span class="ifsc-icon">
+                        #
+                    </span>
+
+
+                    <input type="text"
+                           id="IFSCCode"
+                           class="form-control"
+                           placeholder="IFSC will appear here"
+                           value="@(Model == null ? "" : Model.IFSCCode)"
+                           readonly />
+
+                </div>
+
+
+                <small class="form-help">
+                    IFSC code is automatically displayed from the selected branch.
+                </small>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SECURITY
+                 ================================================= -->
+
+            <div class="transaction-security-note">
+
+                <span class="security-icon">
+                    ✓
+                </span>
+
+
+                <div>
+
+                    <strong>
+                        Secure Beneficiary Registration
+                    </strong>
+
+                    <p>
+                        Only active accounts from the banking system
+                        can be saved as beneficiaries.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BUTTONS
+                 ================================================= -->
+
+            <div class="bank-form-actions">
+
+                <button type="submit"
+                        class="btn btn-primary transaction-submit-btn">
+
+                    Add Beneficiary
+
+                </button>
+
+
+                @Html.ActionLink(
+                    "Back to Beneficiaries",
+                    "Index",
+                    "CustomerBeneficiary",
+                    null,
+                    new
+                    {
+                        @class = "btn btn-secondary"
+                    }
+                )
+
+            </div>
+
+        }
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMATION CARD
+         ===================================================== -->
+
+    <div class="transfer-info-card">
+
+        <h4>
+            Beneficiary Information
+        </h4>
+
+
+        <div class="transfer-info-divider"></div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Beneficiary
+            </span>
+
+            <strong>
+                Saved Account
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Account
+            </span>
+
+            <strong>
+                Select from available accounts
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Bank
+            </span>
+
+            <strong>
+                Select Bank
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                Branch
+            </span>
+
+            <strong>
+                Select Branch
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-info-item">
+
+            <span>
+                IFSC
+            </span>
+
+            <strong class="processing-text">
+                Auto-filled
+            </strong>
+
+        </div>
+
+
+        <div class="transfer-tip">
+
+            <strong>
+                💡 Important
+            </strong>
+
+            <p>
+                The account number is selected from existing bank
+                accounts so that transfers use a valid destination account.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 @section Scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script>
-
-        document.getElementById("BankBranchId")
-            .addEventListener(
-                "change",
-                function () {
-
-                    var selectedBankId =
-                        this.value;
-
-                    var branchDropdown =
-                        document.getElementById(
-                            "BranchDropdown"
-                        );
-
-                    var options =
-                        branchDropdown
-                            .getElementsByTagName(
-                                "option"
-                            );
-
-                    branchDropdown.value = "";
-
-                    for (
-                        var i = 0;
-                        i < options.length;
-                        i++
-                    ) {
-
-                        var option =
-                            options[i];
-
-                        if (
-                            option.value ===
-                            selectedBankId
-                        ) {
-
-                            branchDropdown.value =
-                                option.value;
-
-                            document.getElementById(
-                                "IFSCCode"
-                            ).value =
-                                option.getAttribute(
-                                    "data-ifsc"
-                                );
-
-                            break;
-                        }
-                    }
-                }
-            );
-
-    </script>
+    <script src="@Url.Content("~/Scripts/beneficiary.js")"></script>
 }

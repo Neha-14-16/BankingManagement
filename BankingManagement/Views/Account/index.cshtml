@@ -1,106 +1,425 @@
-﻿@model IEnumerable<BankingManagement.DTOs.AccountDTO>
+﻿@using System.Linq
+@model IEnumerable<BankingManagement.DTOs.AccountDTO>
 
 @{
-    ViewBag.Title = "Accounts";
+    ViewBag.Title = "Account Management";
+
+    decimal totalBalance = 0;
+
+    int activeAccounts = 0;
+
+    if (Model != null)
+    {
+        totalBalance = Model.Sum(a => a.Balance);
+
+        activeAccounts = Model.Count(
+            a => !string.IsNullOrEmpty(a.Status) &&
+                 a.Status.ToLower() == "active"
+        );
+    }
 }
 
-<h2>Accounts</h2>
 
-<p>
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
+
+<div class="admin-page-header">
+
+    <div>
+
+        <p class="section-label">
+            ACCOUNT MANAGEMENT
+        </p>
+
+        <h2>
+            Accounts
+        </h2>
+
+        <p class="bank-page-subtitle">
+            View and manage customer bank accounts.
+        </p>
+
+    </div>
+
+    <div>
+
+        @Html.ActionLink(
+            "＋ Create New Account",
+            "Create",
+            "Account",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ACCOUNT SUMMARY
+     ===================================================== -->
+
+<div class="row dashboard-summary">
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL ACCOUNTS
+            </div>
+
+            <div class="bank-card-value">
+                @(Model == null ? 0 : Model.Count())
+            </div>
+
+            <div class="bank-card-subtitle">
+                Bank accounts registered
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                ACTIVE ACCOUNTS
+            </div>
+
+            <div class="bank-card-value">
+                @activeAccounts
+            </div>
+
+            <div class="bank-card-subtitle">
+                Currently active accounts
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL BALANCE
+            </div>
+
+            <div class="bank-card-value">
+                ₹ @totalBalance.ToString("N2")
+            </div>
+
+            <div class="bank-card-subtitle">
+                Combined account balance
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ACCOUNT DIRECTORY
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            REGISTERED ACCOUNTS
+        </p>
+
+        <h3>
+            Account Directory
+        </h3>
+
+    </div>
+
+</div>
+
+
+@if (Model == null || !Model.Any())
+{
+    <div class="bank-card empty-state">
+
+        <div class="empty-icon">
+            💳
+        </div>
+
+        <h4>
+            No Accounts Found
+        </h4>
+
+        <p>
+            There are currently no bank accounts registered.
+        </p>
+
+        @Html.ActionLink(
+            "Create New Account",
+            "Create",
+            "Account",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+}
+else
+{
+    <div class="bank-card admin-table-card">
+
+        <div class="table-responsive">
+
+            <table class="table banking-table admin-account-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Account
+                        </th>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Account Type
+                        </th>
+
+                        <th>
+                            Balance
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- =================================================
+                                 ACCOUNT
+                                 ================================================= -->
+
+                            <td>
+
+                                <div class="admin-account-name">
+
+                                    <div class="admin-account-icon">
+                                        💳
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @item.AccountNumber
+                                        </strong>
+
+                                        <span>
+                                            Account ID: @item.AccountId
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================================
+                                 CUSTOMER
+                                 ================================================= -->
+
+                            <td>
+
+                                <div class="admin-account-name">
+
+                                    <div class="admin-customer-avatar">
+
+                                        @if (!string.IsNullOrEmpty(item.CustomerName))
+                                        {
+                                            @item.CustomerName.Substring(0, 1).ToUpper()
+                                        }
+                                        else
+                                        {
+                                            <span>?</span>
+                                        }
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @item.CustomerName
+                                        </strong>
+
+                                        <span>
+                                            Customer ID: @item.CustomerId
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- =================================================
+                                 ACCOUNT TYPE
+                                 ================================================= -->
+
+                            <td>
+
+                                <span class="account-type-badge">
+                                    @item.AccountType
+                                </span>
+
+                            </td>
+
+
+                            <!-- =================================================
+                                 BALANCE
+                                 ================================================= -->
+
+                            <td>
+
+                                <strong class="account-balance-text">
+                                    ₹ @item.Balance.ToString("N2")
+                                </strong>
+
+                            </td>
+
+
+                            <!-- =================================================
+                                 STATUS
+                                 ================================================= -->
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.Status) &&
+                                    item.Status.ToLower() == "active")
+                                {
+                                    <span class="status-active">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-inactive">
+                                        @item.Status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- =================================================
+                                 CREATED
+                                 ================================================= -->
+
+                            <td>
+                                @item.CreatedDate.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <!-- =================================================
+                                 ACTIONS
+                                 ================================================= -->
+
+                            <td>
+
+                                <div class="admin-table-actions">
+
+                                    @Html.ActionLink(
+                                        "Edit",
+                                        "Edit",
+                                        new { id = item.AccountId },
+                                        new
+                                        {
+                                            @class = "btn btn-sm btn-outline-primary"
+                                        }
+                                    )
+
+
+                                    @Html.ActionLink(
+                                        "Details",
+                                        "Details",
+                                        new { id = item.AccountId },
+                                        new
+                                        {
+                                            @class = "btn btn-sm btn-outline-info"
+                                        }
+                                    )
+
+
+                                    @Html.ActionLink(
+                                        "Delete",
+                                        "Delete",
+                                        new { id = item.AccountId },
+                                        new
+                                        {
+                                            @class = "btn btn-sm btn-outline-danger"
+                                        }
+                                    )
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     BACK
+     ===================================================== -->
+
+<div class="admin-page-footer">
+
     @Html.ActionLink(
-        "Create New Account",
-        "Create",
-        "Account",
+        "← Back to Administrator Dashboard",
+        "Index",
+        "AdminDashboard",
         null,
-        new { @class = "btn btn-primary" }
+        new { @class = "btn btn-secondary" }
     )
-</p>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.AccountId)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.AccountNumber)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.AccountType)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.Balance)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-
-        <th>
-            Actions
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountId)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountNumber)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountType)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-
-            <td>
-                @Html.ActionLink(
-                    "Edit",
-                    "Edit",
-                    new { id = item.AccountId }
-                )
-                |
-                @Html.ActionLink(
-                    "Details",
-                    "Details",
-                    new { id = item.AccountId }
-                )
-                |
-                @Html.ActionLink(
-                    "Delete",
-                    "Delete",
-                    new { id = item.AccountId }
-                )
-            </td>
-        </tr>
-    }
-</table>
+</div>

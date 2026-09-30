@@ -1,138 +1,398 @@
-﻿@model IEnumerable<BankingManagement.DTOs.BankingTransactionDTO>
+﻿@using System.Linq
+@model IEnumerable<BankingManagement.DTOs.BankingTransactionDTO>
 
 @{
     ViewBag.Title = "Banking Transactions";
+
+    int totalTransactions = Model == null ? 0 : Model.Count();
+
+    int successfulTransactions = Model == null
+        ? 0
+        : Model.Count(
+            t => !string.IsNullOrEmpty(t.Status) &&
+                 t.Status.ToLower() == "success"
+        );
+
+    decimal totalAmount = Model == null
+        ? 0
+        : Model.Sum(t => t.Amount);
 }
 
-<h2>Banking Transactions</h2>
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
 
-<p>
+<div class="admin-page-header">
+
+    <div>
+
+        <p class="section-label">
+            TRANSACTION MANAGEMENT
+        </p>
+
+        <h2>
+            Banking Transactions
+        </h2>
+
+        <p class="bank-page-subtitle">
+            Monitor and manage account-to-account money transfers.
+        </p>
+
+    </div>
+
+    <div>
+
+        @Html.ActionLink(
+            "＋ Create Transfer",
+            "Create",
+            "BankingTransaction",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUMMARY CARDS
+     ===================================================== -->
+
+<div class="row dashboard-summary">
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL TRANSACTIONS
+            </div>
+
+            <div class="bank-card-value">
+                @totalTransactions
+            </div>
+
+            <div class="bank-card-subtitle">
+                Transfers recorded in the system
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                SUCCESSFUL TRANSACTIONS
+            </div>
+
+            <div class="bank-card-value">
+                @successfulTransactions
+            </div>
+
+            <div class="bank-card-subtitle">
+                Successfully completed transfers
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card admin-list-summary">
+
+            <div class="bank-card-title">
+                TOTAL TRANSFER VALUE
+            </div>
+
+            <div class="bank-card-value">
+                ₹ @totalAmount.ToString("N2")
+            </div>
+
+            <div class="bank-card-subtitle">
+                Combined transaction amount
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TRANSACTION DIRECTORY
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            TRANSACTION HISTORY
+        </p>
+
+        <h3>
+            Transfer Records
+        </h3>
+
+    </div>
+
+</div>
+
+
+@if (Model == null || !Model.Any())
+{
+    <div class="bank-card empty-state">
+
+        <div class="empty-icon">
+            ⇄
+        </div>
+
+        <h4>
+            No Transactions Found
+        </h4>
+
+        <p>
+            There are currently no banking transactions recorded.
+        </p>
+
+        @Html.ActionLink(
+            "Create Transfer",
+            "Create",
+            "BankingTransaction",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
+}
+else
+{
+    <div class="bank-card admin-table-card">
+
+        <div class="table-responsive">
+
+            <table class="table banking-table admin-transaction-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Transaction
+                        </th>
+
+                        <th>
+                            From Account
+                        </th>
+
+                        <th>
+                            To Account
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Reference
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- TRANSACTION -->
+
+                            <td>
+
+                                <div class="admin-transaction-name">
+
+                                    <div class="admin-transaction-icon">
+                                        ⇄
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            TXN #@item.TransactionId
+                                        </strong>
+
+                                        <span>
+                                            Banking Transfer
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- FROM ACCOUNT -->
+
+                            <td>
+
+                                <span class="account-number-text">
+                                    @item.FromAccountId
+                                </span>
+
+                            </td>
+
+
+                            <!-- TO ACCOUNT -->
+
+                            <td>
+
+                                <span class="account-number-text">
+                                    @item.ToAccountId
+                                </span>
+
+                            </td>
+
+
+                            <!-- AMOUNT -->
+
+                            <td>
+
+                                <strong class="transaction-amount-text">
+                                    ₹ @item.Amount.ToString("N2")
+                                </strong>
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                @item.TransactionDate.ToString(
+                                    "dd MMM yyyy"
+                                )
+
+                                <small class="transaction-time">
+                                    @item.TransactionDate.ToString(
+                                        "hh:mm tt"
+                                    )
+                                </small>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.Status) &&
+                                    item.Status.ToLower() == "success")
+                                {
+                                    <span class="status-success">
+                                        Success
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-failed">
+                                        @item.Status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- REFERENCE -->
+
+                            <td>
+
+                                <span class="reference-text">
+                                    @item.ReferenceNumber
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <div class="admin-table-actions">
+
+                                    @Html.ActionLink(
+                                        "Details",
+                                        "Details",
+                                        new { id = item.TransactionId },
+                                        new
+                                        {
+                                            @class =
+                                                "btn btn-sm btn-outline-info"
+                                        }
+                                    )
+
+                                    @Html.ActionLink(
+                                        "Delete",
+                                        "Delete",
+                                        new { id = item.TransactionId },
+                                        new
+                                        {
+                                            @class =
+                                                "btn btn-sm btn-outline-danger"
+                                        }
+                                    )
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+}
+
+
+<!-- =====================================================
+     BACK
+     ===================================================== -->
+
+<div class="admin-page-footer">
+
     @Html.ActionLink(
-        "Create Transfer",
-        "Create",
-        "BankingTransaction",
+        "← Back to Administrator Dashboard",
+        "Index",
+        "AdminDashboard",
         null,
-        new { @class = "btn btn-primary" }
+        new { @class = "btn btn-secondary" }
     )
-</p>
 
-<table class="table">
-
-    <tr>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.TransactionId
-            )
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.FromAccountId
-            )
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.ToAccountId
-            )
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.Amount
-            )
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.TransactionDate
-            )
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.Status
-            )
-        </th>
-
-        <th>
-            @Html.DisplayNameFor(
-                model => model.ReferenceNumber
-            )
-        </th>
-
-        <th>
-            Actions
-        </th>
-
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.TransactionId
-                )
-            </td>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.FromAccountId
-                )
-            </td>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.ToAccountId
-                )
-            </td>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.Amount
-                )
-            </td>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.TransactionDate
-                )
-            </td>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.Status
-                )
-            </td>
-
-            <td>
-                @Html.DisplayFor(
-                    modelItem => item.ReferenceNumber
-                )
-            </td>
-
-            <td>
-
-                @Html.ActionLink(
-                    "Details",
-                    "Details",
-                    new { id = item.TransactionId }
-                )
-
-                |
-
-                @Html.ActionLink(
-                    "Delete",
-                    "Delete",
-                    new { id = item.TransactionId }
-                )
-
-            </td>
-
-        </tr>
-    }
-
-</table>
+</div>

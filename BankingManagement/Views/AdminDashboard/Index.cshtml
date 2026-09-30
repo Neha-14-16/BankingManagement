@@ -2,120 +2,324 @@
     ViewBag.Title = "Administrator Dashboard";
 }
 
-<h2>Administrator Dashboard</h2>
+<!-- =====================================================
+     ADMIN HEADER
+     ===================================================== -->
 
-<hr />
+<div class="dashboard-header">
 
-<h3>Welcome, Administrator</h3>
+    <div>
 
-<br />
+        <p class="dashboard-welcome">
+            ADMINISTRATION
+        </p>
 
-<div class="row">
+        <h2>
+            Administrator Dashboard
+        </h2>
 
-    <div class="col-md-6">
+        <p class="dashboard-subtitle">
+            Manage customers, accounts, transactions and payments.
+        </p>
 
-        <h4>Customer Management</h4>
+    </div>
 
-        <p>
+    <div class="dashboard-user-card">
+
+        <div class="dashboard-user-icon">
+            A
+        </div>
+
+        <div>
+
+            <strong>
+                Administrator
+            </strong>
+
+            <span>
+                Admin Portal
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     ADMIN OVERVIEW
+     ===================================================== -->
+
+<div class="row dashboard-summary">
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card">
+
+            <div class="bank-card-title">
+                CUSTOMER MANAGEMENT
+            </div>
+
+            <div class="admin-summary-icon">
+                👥
+            </div>
+
+            <div class="bank-card-subtitle">
+                Create and manage customer accounts.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card">
+
+            <div class="bank-card-title">
+                ACCOUNT MANAGEMENT
+            </div>
+
+            <div class="admin-summary-icon">
+                💳
+            </div>
+
+            <div class="bank-card-subtitle">
+                Manage customer bank accounts.
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card">
+
+            <div class="bank-card-title">
+                TRANSACTION MANAGEMENT
+            </div>
+
+            <div class="admin-summary-icon">
+                ⇄
+            </div>
+
+            <div class="bank-card-subtitle">
+                Monitor banking and payment transactions.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     MANAGEMENT MODULES
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            MANAGEMENT
+        </p>
+
+        <h3>
+            Banking Operations
+        </h3>
+
+    </div>
+
+</div>
+
+<div class="admin-module-grid">
+
+    <!-- CUSTOMER -->
+
+    <div class="admin-module-card">
+
+        <div class="admin-module-icon">
+            👤
+        </div>
+
+        <div class="admin-module-content">
+
+            <h4>
+                Customers
+            </h4>
+
+            <p>
+                Create, view, edit and manage customer information.
+            </p>
+
             @Html.ActionLink(
-                "Customers",
+                "Manage Customers",
                 "Index",
                 "Customer",
                 null,
                 new { @class = "btn btn-primary" }
             )
-        </p>
+
+        </div>
 
     </div>
 
 
-    <div class="col-md-6">
+    <!-- ACCOUNT -->
 
-        <h4>Account Management</h4>
+    <div class="admin-module-card">
 
-        <p>
+        <div class="admin-module-icon">
+            💳
+        </div>
+
+        <div class="admin-module-content">
+
+            <h4>
+                Accounts
+            </h4>
+
+            <p>
+                Manage customer bank accounts and account details.
+            </p>
+
             @Html.ActionLink(
-                "Accounts",
+                "Manage Accounts",
                 "Index",
                 "Account",
                 null,
                 new { @class = "btn btn-primary" }
             )
-        </p>
+
+        </div>
 
     </div>
 
-</div>
 
-<hr />
+    <!-- BANKING TRANSACTIONS -->
 
-<div class="row">
+    <div class="admin-module-card">
 
-    <div class="col-md-6">
+        <div class="admin-module-icon">
+            ⇄
+        </div>
 
-        <h4>Banking Transactions</h4>
+        <div class="admin-module-content">
 
-        <p>
+            <h4>
+                Banking Transactions
+            </h4>
+
+            <p>
+                View and manage account-to-account transfers.
+            </p>
+
             @Html.ActionLink(
-                "Banking Transactions",
+                "View Transactions",
                 "Index",
                 "BankingTransaction",
                 null,
                 new { @class = "btn btn-primary" }
             )
-        </p>
+
+        </div>
 
     </div>
 
 
-    <div class="col-md-6">
+    <!-- PAYMENT TRANSACTIONS -->
 
-        <h4>Payment Transactions</h4>
+    <div class="admin-module-card">
 
-        <p>
+        <div class="admin-module-icon">
+            ₹
+        </div>
+
+        <div class="admin-module-content">
+
+            <h4>
+                Payment Transactions
+            </h4>
+
+            <p>
+                Monitor Razorpay payment records and payment status.
+            </p>
+
             @Html.ActionLink(
-                "Payment Transactions",
+                "View Payments",
                 "Index",
                 "PaymentTransaction",
                 null,
                 new { @class = "btn btn-primary" }
             )
-        </p>
+
+        </div>
 
     </div>
 
-</div>
 
-<hr />
+    <!-- DEPOSIT / WITHDRAWAL -->
 
-<div class="row">
+    <div class="admin-module-card">
 
-    <div class="col-md-6">
+        <div class="admin-module-icon">
+            ₹
+        </div>
 
-        <h4>Deposit / Withdrawal</h4>
+        <div class="admin-module-content">
 
-        <p>
+            <h4>
+                Deposit / Withdrawal
+            </h4>
+
+            <p>
+                Manage account deposits and withdrawal transactions.
+            </p>
+
             @Html.ActionLink(
-                "Deposit / Withdrawal",
+                "Manage Transactions",
                 "Index",
                 "AccountTransaction",
                 null,
                 new { @class = "btn btn-primary" }
             )
-        </p>
+
+        </div>
 
     </div>
 
 </div>
 
-<hr />
+<!-- =====================================================
+     ADMIN ACTIONS
+     ===================================================== -->
 
-<br />
+<div class="section-header">
 
-@Html.ActionLink(
-    "Logout",
-    "Logout",
-    "Login",
-    null,
-    new { @class = "btn btn-danger" }
-)
+    <div>
+
+        <p class="section-label">
+            ACCOUNT
+        </p>
+
+        <h3>
+            Administrator Actions
+        </h3>
+
+    </div>
+
+</div>
+
+<div class="actions-panel admin-actions">
+
+    @Html.ActionLink(
+        "Logout",
+        "Logout",
+        "Login",
+        null,
+        new { @class = "btn btn-danger" }
+    )
+
+</div>

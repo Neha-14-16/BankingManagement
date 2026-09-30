@@ -1,13 +1,70 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
-    </hgroup>
-</body>
-</html>
+﻿@{
+    ViewBag.Title = "Something Went Wrong";
+}
+
+<div class="error-page">
+
+    <div class="error-card">
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <span class="section-label">
+            BANKING MANAGEMENT
+        </span>
+
+        <h1>
+            Something Went Wrong
+        </h1>
+
+        <p class="error-message">
+            An unexpected error occurred while processing your request.
+            Please try again or return to the home page.
+        </p>
+
+
+        <div class="error-actions">
+
+            @Html.ActionLink(
+                "Go to Home",
+                "Index",
+                "Home",
+                null,
+                new { @class = "error-primary-btn" }
+            )
+
+            @Html.ActionLink(
+                "Back to Login",
+                "Index",
+                "Login",
+                null,
+                new { @class = "error-secondary-btn" }
+            )
+
+        </div>
+
+
+        <div class="error-security">
+
+            <span>
+                🛡️
+            </span>
+
+            <div>
+
+                <strong>
+                    Your session is protected
+                </strong>
+
+                <p>
+                    Please do not refresh repeatedly if the issue continues.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

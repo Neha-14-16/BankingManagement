@@ -10,41 +10,105 @@ namespace BankingManagement.Business
     {
         private readonly IGenericRepository<User> _repository;
 
-        public ResetPasswordBusiness(IGenericRepository<User> repository)
+        public ResetPasswordBusiness(
+            IGenericRepository<User> repository)
         {
             _repository = repository;
         }
 
-        public bool ResetPassword(ResetPasswordDTO resetPasswordDTO)
-        {
-            var users = _repository.GetAll();
 
-            var user = users.FirstOrDefault(
-                u => u.PasswordResetToken == resetPasswordDTO.Token
-            );
+        // =====================================================
+        // RESET PASSWORD
+        // =====================================================
+
+        public bool ResetPassword(
+            ResetPasswordDTO resetPasswordDTO)
+        {
+            if (resetPasswordDTO == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                resetPasswordDTO.Token))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                resetPasswordDTO.NewPassword))
+            {
+                return false;
+            }
+
+
+            // =================================================
+            // FIND USER
+            // =================================================
+
+            var users =
+                _repository.GetAll();
+
+            var user =
+                users.FirstOrDefault(
+                    u => u.PasswordResetToken ==
+                         resetPasswordDTO.Token
+                );
+
 
             if (user == null)
             {
                 return false;
             }
 
+
+            // =================================================
+            // ACTIVE USER CHECK
+            // =================================================
+
+            if (!user.IsActive)
+            {
+                return false;
+            }
+
+
+            // =================================================
+            // TOKEN EXPIRY CHECK
+            // =================================================
+
             if (!user.PasswordResetTokenExpiry.HasValue)
             {
                 return false;
             }
 
-            if (user.PasswordResetTokenExpiry.Value < DateTime.Now)
+            if (user.PasswordResetTokenExpiry.Value <=
+                DateTime.Now)
             {
                 return false;
             }
 
-            user.PasswordHash = resetPasswordDTO.NewPassword;
+
+            // =================================================
+            // UPDATE PASSWORD
+            // =================================================
+
+            user.PasswordHash =
+                resetPasswordDTO.NewPassword;
+
+
+            // =================================================
+            // CLEAR TOKEN
+            // =================================================
 
             user.PasswordResetToken = null;
+
             user.PasswordResetTokenExpiry = null;
 
+
             _repository.Update(user);
+
             _repository.Save();
+
 
             return true;
         }

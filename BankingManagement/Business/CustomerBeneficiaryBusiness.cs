@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BankingManagement.DTOs;
 using BankingManagement.Interfaces;
 using BankingManagement.Models;
@@ -16,15 +17,26 @@ namespace BankingManagement.Business
         private readonly IGenericRepository<BankBranch>
             _bankBranchRepository;
 
+        private readonly IGenericRepository<Account>
+            _accountRepository;
+
+
         public CustomerBeneficiaryBusiness(
             IGenericRepository<Customer> customerRepository,
             IGenericRepository<Beneficiary> beneficiaryRepository,
-            IGenericRepository<BankBranch> bankBranchRepository)
+            IGenericRepository<BankBranch> bankBranchRepository,
+            IGenericRepository<Account> accountRepository)
         {
             _customerRepository = customerRepository;
             _beneficiaryRepository = beneficiaryRepository;
             _bankBranchRepository = bankBranchRepository;
+            _accountRepository = accountRepository;
         }
+
+
+        // =====================================================
+        // GET BENEFICIARIES
+        // =====================================================
 
         public List<CustomerBeneficiaryDTO> GetBeneficiaries(
             int userId)
@@ -103,12 +115,67 @@ namespace BankingManagement.Business
             return beneficiaryDTOs;
         }
 
+
+        // =====================================================
+        // GET BANK BRANCHES
+        // =====================================================
+
         public List<BankBranch> GetBankBranches()
         {
             return new List<BankBranch>(
                 _bankBranchRepository.GetAll()
             );
         }
+
+
+        // =====================================================
+        // GET AVAILABLE ACCOUNTS
+        // =====================================================
+
+        public List<Account> GetAvailableAccounts(
+            int userId)
+        {
+            Customer customer =
+                GetCustomerByUserId(userId);
+
+            var accounts =
+                new List<Account>();
+
+            if (customer == null)
+            {
+                return accounts;
+            }
+
+            var allAccounts =
+                _accountRepository.GetAll();
+
+            foreach (var account in allAccounts)
+            {
+                // Only active accounts
+                if (string.IsNullOrEmpty(account.Status) ||
+                    account.Status.ToLower() != "active")
+                {
+                    continue;
+                }
+
+                // Don't show the logged-in customer's
+                // own account as a beneficiary.
+                if (account.CustomerId ==
+                    customer.CustomerId)
+                {
+                    continue;
+                }
+
+                accounts.Add(account);
+            }
+
+            return accounts;
+        }
+
+
+        // =====================================================
+        // ADD BENEFICIARY
+        // =====================================================
 
         public bool AddBeneficiary(
             int userId,
@@ -119,6 +186,7 @@ namespace BankingManagement.Business
                 return false;
             }
 
+
             Customer customer =
                 GetCustomerByUserId(userId);
 
@@ -126,6 +194,55 @@ namespace BankingManagement.Business
             {
                 return false;
             }
+
+
+            // =================================================
+            // FIND REAL ACCOUNT
+            // =================================================
+
+            Account account = null;
+
+            var accounts =
+                _accountRepository.GetAll();
+
+            foreach (var item in accounts)
+            {
+                if (item.AccountNumber ==
+                    beneficiaryDTO.AccountNumber)
+                {
+                    account = item;
+                    break;
+                }
+            }
+
+
+            // Account must exist
+            if (account == null)
+            {
+                return false;
+            }
+
+
+            // Account must be active
+            if (string.IsNullOrEmpty(account.Status) ||
+                account.Status.ToLower() != "active")
+            {
+                return false;
+            }
+
+
+            // Customer cannot add their own account
+            // as a beneficiary.
+            if (account.CustomerId ==
+                customer.CustomerId)
+            {
+                return false;
+            }
+
+
+            // =================================================
+            // FIND BANK BRANCH
+            // =================================================
 
             BankBranch bankBranch =
                 _bankBranchRepository.GetById(
@@ -137,6 +254,11 @@ namespace BankingManagement.Business
                 return false;
             }
 
+
+            // =================================================
+            // CREATE BENEFICIARY
+            // =================================================
+
             var beneficiary =
                 new Beneficiary
                 {
@@ -147,7 +269,7 @@ namespace BankingManagement.Business
                         beneficiaryDTO.BeneficiaryName,
 
                     AccountNumber =
-                        beneficiaryDTO.AccountNumber,
+                        account.AccountNumber,
 
                     BankBranchId =
                         bankBranch.BankBranchId,
@@ -159,8 +281,9 @@ namespace BankingManagement.Business
                         bankBranch.IFSCCode,
 
                     CreatedDate =
-                        System.DateTime.Now
+                        DateTime.Now
                 };
+
 
             _beneficiaryRepository.Add(
                 beneficiary
@@ -170,6 +293,11 @@ namespace BankingManagement.Business
 
             return true;
         }
+
+
+        // =====================================================
+        // DELETE BENEFICIARY
+        // =====================================================
 
         public bool DeleteBeneficiary(
             int userId,
@@ -183,6 +311,7 @@ namespace BankingManagement.Business
                 return false;
             }
 
+
             var beneficiary =
                 _beneficiaryRepository.GetById(
                     beneficiaryId
@@ -193,11 +322,13 @@ namespace BankingManagement.Business
                 return false;
             }
 
+
             if (beneficiary.CustomerId !=
                 customer.CustomerId)
             {
                 return false;
             }
+
 
             _beneficiaryRepository.Delete(
                 beneficiaryId
@@ -207,6 +338,11 @@ namespace BankingManagement.Business
 
             return true;
         }
+
+
+        // =====================================================
+        // GET CUSTOMER BY USER ID
+        // =====================================================
 
         private Customer GetCustomerByUserId(
             int userId)

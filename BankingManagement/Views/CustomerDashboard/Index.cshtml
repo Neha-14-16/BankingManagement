@@ -2,241 +2,624 @@
 
 @{
     ViewBag.Title = "Customer Dashboard";
+
+    decimal totalBalance = 0;
+
+    foreach (var account in Model.Accounts)
+    {
+        totalBalance += account.Balance;
+    }
 }
 
-<h2>Customer Dashboard</h2>
+<!-- =====================================================
+     DASHBOARD HEADER
+     ===================================================== -->
 
-<hr />
+<div class="dashboard-header">
 
-<h3>Welcome, @Model.FullName</h3>
+    <div>
 
-<div class="row">
+        <p class="dashboard-welcome">
+            Welcome back
+        </p>
 
-    <div class="col-md-6">
+        <h2>
+            @Model.FullName
+        </h2>
 
-        <h4>Customer Details</h4>
+        <p class="dashboard-subtitle">
+            Here's an overview of your banking activity.
+        </p>
 
-        <table class="table table-bordered">
+    </div>
 
-            <tr>
-                <th>Full Name</th>
-                <td>@Model.FullName</td>
-            </tr>
+    <div class="dashboard-user-card">
 
-            <tr>
-                <th>Email</th>
-                <td>@Model.Email</td>
-            </tr>
+        <div class="dashboard-user-icon">
+            @Model.FullName.Substring(0, 1).ToUpper()
+        </div>
 
-            <tr>
-                <th>Phone Number</th>
-                <td>@Model.PhoneNumber</td>
-            </tr>
+        <div>
 
-        </table>
+            <strong>
+                @Model.FullName
+            </strong>
+
+            <span>
+                Customer
+            </span>
+
+        </div>
 
     </div>
 
 </div>
 
-<hr />
+<!-- =====================================================
+     SUMMARY CARDS
+     ===================================================== -->
 
-<h3>My Accounts</h3>
+<div class="row dashboard-summary">
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card">
+
+            <div class="bank-card-title">
+                TOTAL BALANCE
+            </div>
+
+            <div class="bank-card-value">
+                ₹ @totalBalance.ToString("N2")
+            </div>
+
+            <div class="bank-card-subtitle">
+                Across all active accounts
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card">
+
+            <div class="bank-card-title">
+                ACTIVE ACCOUNTS
+            </div>
+
+            <div class="bank-card-value">
+                @Model.Accounts.Count
+            </div>
+
+            <div class="bank-card-subtitle">
+                Bank accounts available
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="bank-card summary-card">
+
+            <div class="bank-card-title">
+                BENEFICIARIES
+            </div>
+
+            <div class="bank-card-value">
+                @Model.Beneficiaries.Count
+            </div>
+
+            <div class="bank-card-subtitle">
+                Saved beneficiaries
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     MY ACCOUNTS
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            ACCOUNTS
+        </p>
+
+        <h3>
+            My Accounts
+        </h3>
+
+    </div>
+
+</div>
 
 @if (Model.Accounts.Count == 0)
 {
-    <p>No accounts found.</p>
+    <div class="bank-card">
+
+        <p>
+            No accounts found.
+        </p>
+
+    </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
-
-        <tr>
-            <th>Account Number</th>
-            <th>Account Type</th>
-            <th>Balance</th>
-            <th>Status</th>
-        </tr>
+    <div class="row">
 
         @foreach (var account in Model.Accounts)
         {
-            <tr>
+            <div class="col-md-6 col-lg-4">
 
-                <td>
-                    @account.AccountNumber
-                </td>
+                <div class="account-card">
 
-                <td>
-                    @account.AccountType
-                </td>
+                    <div class="account-label">
+                        @account.AccountType Account
+                    </div>
 
-                <td>
-                    ₹ @account.Balance
-                </td>
+                    <div class="account-number">
+                        @account.AccountNumber
+                    </div>
 
-                <td>
-                    @account.Status
-                </td>
+                    <div class="account-balance">
+                        ₹ @account.Balance.ToString("N2")
+                    </div>
 
-            </tr>
+                    <div class="account-footer">
+
+                        <span>
+                            Available Balance
+                        </span>
+
+                        @if (account.Status.ToLower() == "active")
+                        {
+                            <span class="status-active">
+                                Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="status-inactive">
+                                @account.Status
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
         }
 
-    </table>
+    </div>
 }
 
-<hr />
+<!-- =====================================================
+     QUICK ACTIONS
+     ===================================================== -->
 
-<h3>My Beneficiaries</h3>
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            SERVICES
+        </p>
+
+        <h3>
+            Quick Actions
+        </h3>
+
+    </div>
+
+</div>
+
+<div class="actions-panel banking-actions">
+
+    <a href="@Url.Action("Create", "CustomerTransfer")"
+       class="bank-action">
+
+        <span class="bank-action-icon">
+            ↗
+        </span>
+
+        <span>
+            <strong>Transfer Money</strong>
+            <small>Send money to an account</small>
+        </span>
+
+    </a>
+
+    <a href="@Url.Action(
+        "Create",
+        "CustomerAccountTransaction"
+    )"
+       class="bank-action">
+
+        <span class="bank-action-icon">
+            ₹
+        </span>
+
+        <span>
+            <strong>Deposit / Withdraw</strong>
+            <small>Manage your account balance</small>
+        </span>
+
+    </a>
+
+    <a href="@Url.Action(
+        "Index",
+        "CustomerPayment"
+    )"
+       class="bank-action">
+
+        <span class="bank-action-icon">
+            $
+        </span>
+
+        <span>
+            <strong>Make Payment</strong>
+            <small>Pay using Razorpay</small>
+        </span>
+
+    </a>
+
+    <a href="@Url.Action(
+        "Index",
+        "CustomerBeneficiary"
+    )"
+       class="bank-action">
+
+        <span class="bank-action-icon">
+            +
+        </span>
+
+        <span>
+            <strong>Beneficiaries</strong>
+            <small>Manage saved beneficiaries</small>
+        </span>
+
+    </a>
+
+</div>
+
+<!-- =====================================================
+     BENEFICIARIES
+     ===================================================== -->
+
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            PAYMENTS
+        </p>
+
+        <h3>
+            My Beneficiaries
+        </h3>
+
+    </div>
+
+    <div>
+
+        @Html.ActionLink(
+            "Manage All",
+            "Index",
+            "CustomerBeneficiary",
+            null,
+            new { @class = "section-link" }
+        )
+
+    </div>
+
+</div>
 
 @if (Model.Beneficiaries.Count == 0)
 {
-    <p>No beneficiaries found.</p>
+    <div class="bank-card empty-state">
+
+        <p>
+            No beneficiaries added yet.
+        </p>
+
+        @Html.ActionLink(
+            "Add Beneficiary",
+            "Create",
+            "CustomerBeneficiary",
+            null,
+            new { @class = "btn btn-primary" }
+        )
+
+    </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
+    <div class="bank-card">
 
-        <tr>
-            <th>Beneficiary Name</th>
-            <th>Account Number</th>
-            <th>IFSC Code</th>
-            <th>Bank Name</th>
-        </tr>
+        <div class="table-responsive">
 
-        @foreach (var beneficiary in Model.Beneficiaries)
-        {
-            <tr>
+            <table class="table banking-table">
 
-                <td>
-                    @beneficiary.BeneficiaryName
-                </td>
+                <thead>
 
-                <td>
-                    @beneficiary.AccountNumber
-                </td>
+                    <tr>
 
-                <td>
-                    @beneficiary.IFSCCode
-                </td>
+                        <th>
+                            Beneficiary
+                        </th>
 
-                <td>
-                    @beneficiary.BankName
-                </td>
+                        <th>
+                            Account Number
+                        </th>
 
-            </tr>
-        }
+                        <th>
+                            IFSC
+                        </th>
 
-    </table>
+                        <th>
+                            Bank
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var beneficiary in Model.Beneficiaries)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    @beneficiary.BeneficiaryName
+                                </strong>
+
+                            </td>
+
+                            <td>
+                                @beneficiary.AccountNumber
+                            </td>
+
+                            <td>
+                                @beneficiary.IFSCCode
+                            </td>
+
+                            <td>
+                                @beneficiary.BankName
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 }
 
-<hr />
+<!-- =====================================================
+     TRANSACTIONS
+     ===================================================== -->
 
-<h3>My Transactions</h3>
+<div class="section-header">
+
+    <div>
+
+        <p class="section-label">
+            ACTIVITY
+        </p>
+
+        <h3>
+            Recent Transactions
+        </h3>
+
+    </div>
+
+</div>
 
 @if (Model.Transactions.Count == 0)
 {
-    <p>No transactions found.</p>
+    <div class="bank-card empty-state">
+
+        <p>
+            No transactions found.
+        </p>
+
+    </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
+    <div class="bank-card">
 
-        <tr>
-            <th>From Account</th>
-            <th>To Account</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Reference Number</th>
-        </tr>
+        <div class="table-responsive">
 
-        @foreach (var transaction in Model.Transactions)
-        {
-            <tr>
+            <table class="table banking-table">
 
-                <td>
-                    @transaction.FromAccountNumber
-                </td>
+                <thead>
 
-                <td>
-                    @transaction.ToAccountNumber
-                </td>
+                    <tr>
 
-                <td>
-                    ₹ @transaction.Amount
-                </td>
+                        <th>
+                            From
+                        </th>
 
-                <td>
-                    @transaction.TransactionDate
-                </td>
+                        <th>
+                            To
+                        </th>
 
-                <td>
-                    @transaction.Status
-                </td>
+                        <th>
+                            Amount
+                        </th>
 
-                <td>
-                    @transaction.ReferenceNumber
-                </td>
+                        <th>
+                            Date
+                        </th>
 
-            </tr>
-        }
+                        <th>
+                            Status
+                        </th>
 
-    </table>
+                        <th>
+                            Reference
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var transaction in Model.Transactions
+                        .OrderByDescending(t => t.TransactionDate))
+                    {
+                        <tr>
+
+                            <td>
+                                @transaction.FromAccountNumber
+                            </td>
+
+                            <td>
+                                @transaction.ToAccountNumber
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    ₹ @transaction.Amount.ToString("N2")
+                                </strong>
+
+                            </td>
+
+                            <td>
+                                @transaction.TransactionDate.ToString(
+                                    "dd MMM yyyy, hh:mm tt"
+                                )
+                            </td>
+
+                            <td>
+
+                                @if (transaction.Status.ToLower() == "success")
+                                {
+                                    <span class="status-success">
+                                        Success
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-failed">
+                                        @transaction.Status
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+                                @transaction.ReferenceNumber
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 }
 
-<hr />
+<!-- =====================================================
+     CUSTOMER INFORMATION
+     ===================================================== -->
 
-<h3>Actions</h3>
+<div class="section-header">
 
-<br />
+    <div>
 
-@Html.ActionLink(
-    "Transfer Money",
-    "Create",
-    "CustomerTransfer",
-    null,
-    new { @class = "btn btn-primary" }
-)
+        <p class="section-label">
+            PROFILE
+        </p>
 
-<span style="margin-left: 10px;"></span>
+        <h3>
+            Customer Details
+        </h3>
 
-@Html.ActionLink(
-    "Deposit / Withdrawal",
-    "Create",
-    "CustomerAccountTransaction",
-    null,
-    new { @class = "btn btn-primary" }
-)
+    </div>
 
-<span style="margin-left: 10px;"></span>
+</div>
 
-@Html.ActionLink(
-    "Manage Beneficiaries",
-    "Index",
-    "CustomerBeneficiary",
-    null,
-    new { @class = "btn btn-primary" }
-)
+<div class="bank-card customer-profile-card">
 
-<span style="margin-left: 10px;"></span>
+    <div class="profile-item">
 
-@Html.ActionLink(
-    "Make Payment",
-    "Index",
-    "CustomerPayment",
-    null,
-    new { @class = "btn btn-success" }
-)
+        <span>
+            Full Name
+        </span>
 
-<span style="margin-left: 10px;"></span>
+        <strong>
+            @Model.FullName
+        </strong>
 
-@Html.ActionLink(
-    "Logout",
-    "Logout",
-    "Login",
-    null,
-    new { @class = "btn btn-danger" }
-)
+    </div>
+
+    <div class="profile-item">
+
+        <span>
+            Email
+        </span>
+
+        <strong>
+            @Model.Email
+        </strong>
+
+    </div>
+
+    <div class="profile-item">
+
+        <span>
+            Phone Number
+        </span>
+
+        <strong>
+            @Model.PhoneNumber
+        </strong>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
+     LOGOUT
+     ===================================================== -->
+
+<div class="dashboard-logout">
+
+    @Html.ActionLink(
+        "Logout",
+        "Logout",
+        "Login",
+        null,
+        new { @class = "btn btn-danger" }
+    )
+
+</div>
 
 @section Scripts
 {

@@ -4,71 +4,281 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
+<div class="login-page">
 
-@using (Html.BeginForm("Index", "Login", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+    <div class="login-card">
 
-    <div class="form-horizontal">
+        <!-- =================================================
+             BRANDING
+             ================================================= -->
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="login-brand">
 
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Username,
-                new { @class = "control-label" }
-            )
+            <div class="login-logo">
+                🏦
+            </div>
 
-            @Html.TextBoxFor(
-                model => model.Username,
-                new { @class = "form-control" }
-            )
+            <h1>
+                Banking Management
+            </h1>
 
-            @Html.ValidationMessageFor(
-                model => model.Username,
-                "",
-                new { @class = "text-danger" }
-            )
+            <p>
+                Secure Banking Portal
+            </p>
+
         </div>
 
-        <br />
 
-        <div class="form-group">
-            @Html.LabelFor(
-                model => model.Password,
-                new { @class = "control-label" }
-            )
+        <!-- =================================================
+             PASSWORD RESET SUCCESS
+             ================================================= -->
 
-            @Html.PasswordFor(
-                model => model.Password,
-                new { @class = "form-control" }
-            )
+        @if (TempData["PasswordResetSuccess"] != null)
+        {
+            <div class="login-success-message">
 
-            @Html.ValidationMessageFor(
-                model => model.Password,
-                "",
-                new { @class = "text-danger" }
-            )
+                <div class="login-success-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Password Reset Successful
+                    </strong>
+
+                    <p>
+                        @TempData["PasswordResetSuccess"]
+                    </p>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- =================================================
+             PASSWORD RESET ERROR
+             ================================================= -->
+
+        @if (TempData["ResetError"] != null)
+        {
+            <div class="login-error-message">
+
+                <div class="login-error-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <strong>
+                        Password Reset Error
+                    </strong>
+
+                    <p>
+                        @TempData["ResetError"]
+                    </p>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- =================================================
+             LOGIN HEADING
+             ================================================= -->
+
+        <div class="login-heading">
+
+            <h2>
+                Welcome Back
+            </h2>
+
+            <p>
+                Sign in to continue to your account
+            </p>
+
         </div>
 
-        <br />
 
-        <button type="submit" class="btn btn-primary">
-            Login
-        </button>
+        <!-- =================================================
+             LOGIN FORM
+             ================================================= -->
 
-        <br />
-        <br />
-
-        @Html.ActionLink(
-            "Forgot Password?",
+        @using (Html.BeginForm(
             "Index",
-            "ForgotPassword"
-        )
+            "Login",
+            FormMethod.Post
+        ))
+        {
+            @Html.AntiForgeryToken()
+
+
+            <!-- =================================================
+                 VALIDATION SUMMARY
+                 ================================================= -->
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new
+                {
+                    @class = "login-validation-summary"
+                }
+            )
+
+
+            <!-- =================================================
+                 USERNAME
+                 ================================================= -->
+
+            <div class="login-form-group">
+
+                @Html.LabelFor(
+                    model => model.Username,
+                    new
+                    {
+                        @class = "login-label"
+                    }
+                )
+
+                <div class="login-input-wrapper">
+
+                    <span class="login-input-icon">
+                        👤
+                    </span>
+
+                    @Html.TextBoxFor(
+                        model => model.Username,
+                        new
+                        {
+                            @class = "login-input",
+                            placeholder = "Enter your username",
+                            autocomplete = "username"
+                        }
+                    )
+
+                </div>
+
+                @Html.ValidationMessageFor(
+                    model => model.Username,
+                    "",
+                    new
+                    {
+                        @class = "login-validation-message"
+                    }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 PASSWORD
+                 ================================================= -->
+
+            <div class="login-form-group">
+
+                @Html.LabelFor(
+                    model => model.Password,
+                    new
+                    {
+                        @class = "login-label"
+                    }
+                )
+
+                <div class="login-input-wrapper">
+
+                    <span class="login-input-icon">
+                        🔒
+                    </span>
+
+                    @Html.PasswordFor(
+                        model => model.Password,
+                        new
+                        {
+                            @class = "login-input",
+                            placeholder = "Enter your password",
+                            autocomplete = "current-password"
+                        }
+                    )
+
+                </div>
+
+                @Html.ValidationMessageFor(
+                    model => model.Password,
+                    "",
+                    new
+                    {
+                        @class = "login-validation-message"
+                    }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 LOGIN BUTTON
+                 ================================================= -->
+
+            <button type="submit"
+                    class="login-submit-btn">
+
+                Sign In
+
+            </button>
+
+
+            <!-- =================================================
+                 FORGOT PASSWORD
+                 ================================================= -->
+
+            <div class="login-forgot">
+
+                @Html.ActionLink(
+                    "Forgot Password?",
+                    "Index",
+                    "ForgotPassword",
+                    null,
+                    new
+                    {
+                        @class = "login-forgot-link"
+                    }
+                )
+
+            </div>
+
+        }
+
+
+        <!-- =================================================
+             SECURITY MESSAGE
+             ================================================= -->
+
+        <div class="login-security">
+
+            <span class="login-security-icon">
+                🔐
+            </span>
+
+            <div>
+
+                <strong>
+                    Secure Login
+                </strong>
+
+                <p>
+                    Your banking credentials are protected.
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
-}
+
+</div>
+
 
 @section Scripts
 {
